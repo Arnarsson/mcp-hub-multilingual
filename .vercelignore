@@ -1,0 +1,8 @@
+project-workspaces/
+*.xml
+node_modules/
+.git/
+x.html
+*.log
+*.tmp
+.DS_Store
