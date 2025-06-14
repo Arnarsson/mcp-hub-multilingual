@@ -5555,11 +5555,819 @@ ORDER BY total_orders DESC;">SELECT * FROM users LIMIT 5;</textarea>
             initPricingCalculator();
             initDemoInteractions();
             
+            // Initialize real-time demo when opened
+            setTimeout(() => {
+                const realtimeDemo = document.querySelector('[data-demo="realtime"]');
+                if (realtimeDemo) {
+                    realtimeDemo.addEventListener('click', () => {
+                        setTimeout(initRealtimeDemo, 500);
+                    });
+                }
+            }, 1000);
+            
             // Hide loading screen
             hideLoadingScreen();
             
             console.log('🚀 MCP Hub loaded successfully with all premium features!');
         });
+
+        // **REAL-TIME DATA DEMO IMPLEMENTATION**
+        function generateRealtimeDemo() {
+            return `
+                <div class="demo-container">
+                    <div class="demo-split">
+                        <div class="demo-left">
+                            <h3>📊 Real-time Data Integration</h3>
+                            <div class="realtime-connection-status">
+                                <div class="connection-info">
+                                    <span class="status-indicator connected" id="connectionStatus"></span>
+                                    <span id="connectionText">Connected to WebSocket</span>
+                                </div>
+                                <div class="connection-controls">
+                                    <button class="connection-btn" id="connectBtn" onclick="toggleConnection()">Connect</button>
+                                    <button class="connection-btn disconnect" id="disconnectBtn" onclick="toggleConnection()" style="display: none;">Disconnect</button>
+                                </div>
+                            </div>
+                            
+                            <div class="subscription-panel">
+                                <div class="subscription-header">
+                                    <h4 class="subscription-title">Active Subscriptions</h4>
+                                </div>
+                                <div class="active-subscriptions" id="activeSubscriptions">
+                                    <span style="opacity: 0.7; font-size: 12px;">No active subscriptions</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stream-browser">
+                                <h4>Available Data Streams</h4>
+                                <div class="stream-grid">
+                                    <div class="stream-card" data-stream="stock_aapl" onclick="toggleSubscription('stock_aapl')">
+                                        <div class="stream-header">
+                                            <span class="stream-icon">📈</span>
+                                            <span class="stream-name">Apple Inc. (AAPL)</span>
+                                        </div>
+                                        <div class="stream-description">Real-time stock price and volume data</div>
+                                        <div class="stream-meta">
+                                            <span>1s updates</span>
+                                            <span>~2KB/min</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stream-card" data-stream="sensor_temp" onclick="toggleSubscription('sensor_temp')">
+                                        <div class="stream-header">
+                                            <span class="stream-icon">🌡️</span>
+                                            <span class="stream-name">Temperature Sensor</span>
+                                        </div>
+                                        <div class="stream-description">IoT temperature monitoring data</div>
+                                        <div class="stream-meta">
+                                            <span>5s updates</span>
+                                            <span>~0.5KB/min</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stream-card" data-stream="system_cpu" onclick="toggleSubscription('system_cpu')">
+                                        <div class="stream-header">
+                                            <span class="stream-icon">💻</span>
+                                            <span class="stream-name">CPU Usage</span>
+                                        </div>
+                                        <div class="stream-description">System performance monitoring</div>
+                                        <div class="stream-meta">
+                                            <span>2s updates</span>
+                                            <span>~1KB/min</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stream-card" data-stream="analytics_views" onclick="toggleSubscription('analytics_views')">
+                                        <div class="stream-header">
+                                            <span class="stream-icon">📊</span>
+                                            <span class="stream-name">Page Views</span>
+                                        </div>
+                                        <div class="stream-description">Website analytics in real-time</div>
+                                        <div class="stream-meta">
+                                            <span>10s updates</span>
+                                            <span>~1.5KB/min</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="data-export-panel">
+                                <div class="export-header">
+                                    <h4 class="export-title">Export Data</h4>
+                                </div>
+                                <div class="export-options">
+                                    <div class="export-option" onclick="selectExportFormat('csv')">CSV</div>
+                                    <div class="export-option" onclick="selectExportFormat('json')">JSON</div>
+                                    <div class="export-option" onclick="selectExportFormat('excel')">Excel</div>
+                                </div>
+                                <button class="export-btn" onclick="exportData()" disabled>Export Selected Data</button>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-right">
+                            <div class="demo-tabs">
+                                <button class="demo-tab active" onclick="switchRealtimeTab('chart')">📈 Live Chart</button>
+                                <button class="demo-tab" onclick="switchRealtimeTab('protocol')">🔌 MCP Protocol</button>
+                                <button class="demo-tab" onclick="switchRealtimeTab('data')">📊 Raw Data</button>
+                            </div>
+                            
+                            <div class="demo-content">
+                                <div id="chartTab" class="tab-content active">
+                                    <div class="chart-container">
+                                        <div class="chart-header">
+                                            <div class="chart-title" id="chartTitle">Select a stream to view data</div>
+                                            <div class="chart-controls">
+                                                <button class="chart-btn active" onclick="setTimeRange('1m')">1M</button>
+                                                <button class="chart-btn" onclick="setTimeRange('5m')">5M</button>
+                                                <button class="chart-btn" onclick="setTimeRange('15m')">15M</button>
+                                                <button class="chart-btn" onclick="setTimeRange('1h')">1H</button>
+                                            </div>
+                                        </div>
+                                        <div class="chart-canvas-container">
+                                            <div class="chart-loading" id="chartLoading">
+                                                <div class="loading-spinner"></div>
+                                                <p>Subscribe to a data stream to see live charts</p>
+                                            </div>
+                                            <canvas id="realtimeChart" class="chart-canvas" style="display: none;"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="protocolTab" class="tab-content">
+                                    <div class="realtime-protocol-viewer">
+                                        <div class="protocol-controls">
+                                            <button class="protocol-filter-btn active" onclick="filterProtocol('all')">All</button>
+                                            <button class="protocol-filter-btn" onclick="filterProtocol('subscribe')">Subscribe</button>
+                                            <button class="protocol-filter-btn" onclick="filterProtocol('data')">Data</button>
+                                            <button class="protocol-filter-btn" onclick="filterProtocol('unsubscribe')">Unsubscribe</button>
+                                        </div>
+                                        <div class="realtime-protocol-log" id="realtimeProtocolLog">
+                                            <div class="protocol-message">
+                                                <div class="message-header">WebSocket Connection:</div>
+                                                <pre class="message-content">{
+  "type": "connection",
+  "status": "connected",
+  "endpoint": "wss://mcp-streams.example.com/v1",
+  "timestamp": "${new Date().toISOString()}"
+}</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="dataTab" class="tab-content">
+                                    <div class="query-results">
+                                        <div class="results-header">
+                                            <span id="dataInfo">Subscribe to streams to see raw data</span>
+                                        </div>
+                                        <div class="results-content" id="dataContent">
+                                            <p style="opacity: 0.7; text-align: center; padding: 40px;">
+                                                Real-time data will appear here when you subscribe to streams
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // **REAL-TIME DATA DEMO FUNCTIONALITY**
+        let realtimeChart = null;
+        let connectionState = 'disconnected';
+        let activeStreams = new Map();
+        let streamData = new Map();
+        let updateIntervals = new Map();
+        let selectedExportFormat = null;
+        let currentTimeRange = '1m';
+        let protocolFilter = 'all';
+        
+        // Mock data generators for different stream types
+        const dataGenerators = {
+            stock_aapl: {
+                name: 'Apple Inc. (AAPL)',
+                icon: '📈',
+                baseValue: 150,
+                volatility: 2,
+                unit: '$',
+                updateInterval: 1000,
+                generate: function() {
+                    const timestamp = new Date();
+                    const variation = (Math.random() - 0.5) * this.volatility;
+                    this.baseValue = Math.max(100, this.baseValue + variation);
+                    return {
+                        timestamp: timestamp,
+                        value: parseFloat(this.baseValue.toFixed(2)),
+                        volume: Math.floor(Math.random() * 10000) + 5000,
+                        change: variation
+                    };
+                }
+            },
+            
+            sensor_temp: {
+                name: 'Temperature Sensor',
+                icon: '🌡️',
+                baseValue: 22,
+                volatility: 0.5,
+                unit: '°C',
+                updateInterval: 5000,
+                generate: function() {
+                    const timestamp = new Date();
+                    const dailyCycle = Math.sin((timestamp.getHours() * 60 + timestamp.getMinutes()) / 1440 * 2 * Math.PI) * 3;
+                    const randomVariation = (Math.random() - 0.5) * this.volatility;
+                    this.baseValue = 22 + dailyCycle + randomVariation;
+                    return {
+                        timestamp: timestamp,
+                        value: parseFloat(this.baseValue.toFixed(1)),
+                        humidity: Math.floor(Math.random() * 20) + 40,
+                        location: 'Office Building Floor 3'
+                    };
+                }
+            },
+            
+            system_cpu: {
+                name: 'CPU Usage',
+                icon: '💻',
+                baseValue: 25,
+                volatility: 10,
+                unit: '%',
+                updateInterval: 2000,
+                generate: function() {
+                    const timestamp = new Date();
+                    const spike = Math.random() < 0.1 ? Math.random() * 30 : 0;
+                    const variation = (Math.random() - 0.5) * this.volatility;
+                    this.baseValue = Math.max(5, Math.min(95, this.baseValue + variation + spike));
+                    return {
+                        timestamp: timestamp,
+                        value: parseFloat(this.baseValue.toFixed(1)),
+                        memory: Math.floor(Math.random() * 20) + 60,
+                        processes: Math.floor(Math.random() * 50) + 150
+                    };
+                }
+            },
+            
+            analytics_views: {
+                name: 'Page Views',
+                icon: '📊',
+                baseValue: 120,
+                volatility: 20,
+                unit: 'views/min',
+                updateInterval: 10000,
+                generate: function() {
+                    const timestamp = new Date();
+                    const hourlyPattern = Math.max(0.3, Math.sin((timestamp.getHours() - 6) / 24 * 2 * Math.PI));
+                    const variation = (Math.random() - 0.5) * this.volatility;
+                    this.baseValue = Math.max(10, 120 * hourlyPattern + variation);
+                    return {
+                        timestamp: timestamp,
+                        value: Math.floor(this.baseValue),
+                        bounceRate: parseFloat((Math.random() * 0.3 + 0.2).toFixed(2)),
+                        avgSession: parseFloat((Math.random() * 2 + 1.5).toFixed(1))
+                    };
+                }
+            }
+        };
+        
+        function initRealtimeDemo() {
+            // Initialize connection state
+            updateConnectionUI();
+            
+            // Connect automatically for demo
+            setTimeout(() => {
+                if (connectionState === 'disconnected') {
+                    toggleConnection();
+                }
+            }, 1000);
+        }
+        
+        function toggleConnection() {
+            if (connectionState === 'disconnected') {
+                connectToStreams();
+            } else {
+                disconnectFromStreams();
+            }
+        }
+        
+        function connectToStreams() {
+            connectionState = 'connecting';
+            updateConnectionUI();
+            
+            addRealtimeProtocolMessage('connection', {
+                type: 'websocket_connect',
+                endpoint: 'wss://mcp-streams.example.com/v1'
+            });
+            
+            setTimeout(() => {
+                connectionState = 'connected';
+                updateConnectionUI();
+                
+                addRealtimeProtocolMessage('connection', {
+                    type: 'websocket_connected',
+                    status: 'success',
+                    capabilities: ['streaming', 'subscription', 'aggregation']
+                });
+            }, 1500);
+        }
+        
+        function disconnectFromStreams() {
+            connectionState = 'disconnected';
+            
+            // Unsubscribe from all streams
+            activeStreams.forEach((_, streamId) => {
+                unsubscribeFromStream(streamId);
+            });
+            
+            updateConnectionUI();
+            
+            addRealtimeProtocolMessage('connection', {
+                type: 'websocket_disconnect',
+                reason: 'user_initiated'
+            });
+        }
+        
+        function updateConnectionUI() {
+            const statusIndicator = document.getElementById('connectionStatus');
+            const connectionText = document.getElementById('connectionText');
+            const connectBtn = document.getElementById('connectBtn');
+            const disconnectBtn = document.getElementById('disconnectBtn');
+            
+            if (!statusIndicator) return;
+            
+            statusIndicator.className = `status-indicator ${connectionState}`;
+            
+            switch (connectionState) {
+                case 'connected':
+                    connectionText.textContent = 'Connected to WebSocket';
+                    connectBtn.style.display = 'none';
+                    disconnectBtn.style.display = 'inline-block';
+                    break;
+                case 'connecting':
+                    connectionText.textContent = 'Connecting...';
+                    connectBtn.style.display = 'none';
+                    disconnectBtn.style.display = 'none';
+                    break;
+                default:
+                    connectionText.textContent = 'Disconnected';
+                    connectBtn.style.display = 'inline-block';
+                    disconnectBtn.style.display = 'none';
+            }
+        }
+        
+        function toggleSubscription(streamId) {
+            if (connectionState !== 'connected') {
+                alert('Please connect to the WebSocket first');
+                return;
+            }
+            
+            if (activeStreams.has(streamId)) {
+                unsubscribeFromStream(streamId);
+            } else {
+                subscribeToStream(streamId);
+            }
+        }
+        
+        function subscribeToStream(streamId) {
+            const generator = dataGenerators[streamId];
+            if (!generator) return;
+            
+            activeStreams.set(streamId, generator);
+            streamData.set(streamId, []);
+            
+            // Update UI
+            const streamCard = document.querySelector(`[data-stream="${streamId}"]`);
+            if (streamCard) {
+                streamCard.classList.add('subscribed');
+            }
+            
+            updateActiveSubscriptions();
+            updateChart();
+            
+            // Add MCP protocol message
+            addRealtimeProtocolMessage('subscribe', {
+                streamId: streamId,
+                options: {
+                    interval: generator.updateInterval + 'ms',
+                    format: 'real-time'
+                }
+            });
+            
+            // Start generating data
+            const interval = setInterval(() => {
+                if (!activeStreams.has(streamId)) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                const newData = generator.generate();
+                const data = streamData.get(streamId);
+                data.push(newData);
+                
+                // Keep only recent data based on time range
+                const cutoff = new Date(Date.now() - getTimeRangeMs());
+                streamData.set(streamId, data.filter(d => d.timestamp >= cutoff));
+                
+                // Update chart if this stream is active
+                updateChart();
+                updateRawDataDisplay();
+                
+                // Add data protocol message occasionally
+                if (Math.random() < 0.1) {
+                    addRealtimeProtocolMessage('data', {
+                        streamId: streamId,
+                        data: newData,
+                        timestamp: newData.timestamp.toISOString()
+                    });
+                }
+            }, generator.updateInterval);
+            
+            updateIntervals.set(streamId, interval);
+        }
+        
+        function unsubscribeFromStream(streamId) {
+            activeStreams.delete(streamId);
+            
+            const interval = updateIntervals.get(streamId);
+            if (interval) {
+                clearInterval(interval);
+                updateIntervals.delete(streamId);
+            }
+            
+            // Update UI
+            const streamCard = document.querySelector(`[data-stream="${streamId}"]`);
+            if (streamCard) {
+                streamCard.classList.remove('subscribed');
+            }
+            
+            updateActiveSubscriptions();
+            updateChart();
+            
+            // Add MCP protocol message
+            addRealtimeProtocolMessage('unsubscribe', {
+                streamId: streamId,
+                reason: 'user_request'
+            });
+        }
+        
+        function updateActiveSubscriptions() {
+            const container = document.getElementById('activeSubscriptions');
+            if (!container) return;
+            
+            if (activeStreams.size === 0) {
+                container.innerHTML = '<span style="opacity: 0.7; font-size: 12px;">No active subscriptions</span>';
+                return;
+            }
+            
+            const tags = Array.from(activeStreams.keys()).map(streamId => {
+                const generator = dataGenerators[streamId];
+                return `
+                    <div class="subscription-tag">
+                        ${generator.icon} ${generator.name}
+                        <button class="remove-btn" onclick="unsubscribeFromStream('${streamId}')">×</button>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = tags;
+        }
+        
+        function updateChart() {
+            const canvas = document.getElementById('realtimeChart');
+            const loading = document.getElementById('chartLoading');
+            const chartTitle = document.getElementById('chartTitle');
+            
+            if (!canvas || activeStreams.size === 0) {
+                if (loading) loading.style.display = 'flex';
+                if (canvas) canvas.style.display = 'none';
+                if (chartTitle) chartTitle.textContent = 'Select a stream to view data';
+                return;
+            }
+            
+            if (loading) loading.style.display = 'none';
+            if (canvas) canvas.style.display = 'block';
+            
+            // Initialize chart if needed
+            if (!realtimeChart) {
+                const ctx = canvas.getContext('2d');
+                realtimeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: []
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 200
+                        },
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    displayFormats: {
+                                        second: 'HH:mm:ss',
+                                        minute: 'HH:mm'
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.8)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Update chart data
+            const datasets = [];
+            const colors = ['#4a90e2', '#22c55e', '#f59e0b', '#ef4444'];
+            let colorIndex = 0;
+            
+            activeStreams.forEach((generator, streamId) => {
+                const data = streamData.get(streamId) || [];
+                const color = colors[colorIndex % colors.length];
+                
+                datasets.push({
+                    label: `${generator.name} (${generator.unit})`,
+                    data: data.map(d => ({
+                        x: d.timestamp,
+                        y: d.value
+                    })),
+                    borderColor: color,
+                    backgroundColor: color + '20',
+                    tension: 0.4,
+                    fill: false,
+                    pointRadius: 0,
+                    pointHoverRadius: 4
+                });
+                
+                colorIndex++;
+            });
+            
+            realtimeChart.data.datasets = datasets;
+            realtimeChart.update('none');
+            
+            // Update title
+            if (chartTitle) {
+                const names = Array.from(activeStreams.values()).map(g => g.name);
+                chartTitle.textContent = names.length === 1 ? names[0] : `${names.length} Active Streams`;
+            }
+        }
+        
+        function switchRealtimeTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.demo-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+        
+        function setTimeRange(range) {
+            currentTimeRange = range;
+            
+            // Update button states
+            document.querySelectorAll('.chart-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filter existing data
+            streamData.forEach((data, streamId) => {
+                const cutoff = new Date(Date.now() - getTimeRangeMs());
+                streamData.set(streamId, data.filter(d => d.timestamp >= cutoff));
+            });
+            
+            updateChart();
+        }
+        
+        function getTimeRangeMs() {
+            switch (currentTimeRange) {
+                case '1m': return 60 * 1000;
+                case '5m': return 5 * 60 * 1000;
+                case '15m': return 15 * 60 * 1000;
+                case '1h': return 60 * 60 * 1000;
+                default: return 60 * 1000;
+            }
+        }
+        
+        function filterProtocol(type) {
+            protocolFilter = type;
+            
+            // Update button states
+            document.querySelectorAll('.protocol-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filter messages (simplified for demo)
+            const messages = document.querySelectorAll('#realtimeProtocolLog .protocol-message');
+            messages.forEach(msg => {
+                if (type === 'all' || msg.classList.contains(type)) {
+                    msg.style.display = 'block';
+                } else {
+                    msg.style.display = 'none';
+                }
+            });
+        }
+        
+        function addRealtimeProtocolMessage(type, data) {
+            const protocolLog = document.getElementById('realtimeProtocolLog');
+            if (!protocolLog) return;
+
+            const timestamp = new Date().toISOString();
+            const requestId = Math.floor(Math.random() * 1000);
+
+            let message;
+            if (type === 'subscribe') {
+                message = {
+                    jsonrpc: "2.0",
+                    id: requestId,
+                    method: "streams/subscribe",
+                    params: {
+                        streamId: data.streamId,
+                        options: data.options
+                    }
+                };
+            } else if (type === 'unsubscribe') {
+                message = {
+                    jsonrpc: "2.0",
+                    id: requestId,
+                    method: "streams/unsubscribe",
+                    params: {
+                        streamId: data.streamId
+                    }
+                };
+            } else if (type === 'data') {
+                message = {
+                    jsonrpc: "2.0",
+                    method: "streams/data",
+                    params: {
+                        streamId: data.streamId,
+                        timestamp: data.timestamp,
+                        payload: data.data
+                    }
+                };
+            } else {
+                message = data;
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `protocol-message ${type}`;
+            messageDiv.innerHTML = `
+                <div class="message-header">${type.charAt(0).toUpperCase() + type.slice(1)} (${timestamp}):</div>
+                <pre class="message-content">${JSON.stringify(message, null, 2)}</pre>
+            `;
+
+            protocolLog.insertBefore(messageDiv, protocolLog.firstChild);
+
+            // Limit to 20 messages
+            const messages = protocolLog.querySelectorAll('.protocol-message');
+            if (messages.length > 20) {
+                for (let i = 20; i < messages.length; i++) {
+                    messages[i].remove();
+                }
+            }
+        }
+        
+        function updateRawDataDisplay() {
+            const dataInfo = document.getElementById('dataInfo');
+            const dataContent = document.getElementById('dataContent');
+            
+            if (!dataInfo || !dataContent || activeStreams.size === 0) {
+                if (dataInfo) dataInfo.textContent = 'Subscribe to streams to see raw data';
+                if (dataContent) dataContent.innerHTML = '<p style="opacity: 0.7; text-align: center; padding: 40px;">Real-time data will appear here when you subscribe to streams</p>';
+                return;
+            }
+            
+            const totalDataPoints = Array.from(streamData.values()).reduce((sum, data) => sum + data.length, 0);
+            dataInfo.textContent = `${activeStreams.size} active streams, ${totalDataPoints} data points`;
+            
+            // Create a table with recent data
+            let tableHTML = '<table class="results-table"><thead><tr><th>Stream</th><th>Timestamp</th><th>Value</th><th>Additional Data</th></tr></thead><tbody>';
+            
+            streamData.forEach((data, streamId) => {
+                const generator = dataGenerators[streamId];
+                const recentData = data.slice(-5); // Show last 5 data points
+                
+                recentData.forEach(point => {
+                    const additionalData = Object.keys(point)
+                        .filter(key => key !== 'timestamp' && key !== 'value')
+                        .map(key => `${key}: ${point[key]}`)
+                        .join(', ');
+                    
+                    tableHTML += `
+                        <tr>
+                            <td>${generator.icon} ${generator.name}</td>
+                            <td>${point.timestamp.toLocaleTimeString()}</td>
+                            <td>${point.value} ${generator.unit}</td>
+                            <td>${additionalData}</td>
+                        </tr>
+                    `;
+                });
+            });
+            
+            tableHTML += '</tbody></table>';
+            dataContent.innerHTML = tableHTML;
+        }
+        
+        function selectExportFormat(format) {
+            selectedExportFormat = format;
+            
+            // Update UI
+            document.querySelectorAll('.export-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            
+            const exportBtn = document.querySelector('.export-btn');
+            if (exportBtn) {
+                exportBtn.disabled = false;
+            }
+        }
+        
+        function exportData() {
+            if (!selectedExportFormat || activeStreams.size === 0) {
+                alert('Please select an export format and ensure you have active subscriptions');
+                return;
+            }
+            
+            let content = '';
+            let filename = '';
+            
+            // Combine all stream data
+            const allData = [];
+            streamData.forEach((data, streamId) => {
+                const generator = dataGenerators[streamId];
+                data.forEach(point => {
+                    allData.push({
+                        stream: generator.name,
+                        streamId: streamId,
+                        timestamp: point.timestamp.toISOString(),
+                        value: point.value,
+                        unit: generator.unit,
+                        ...point
+                    });
+                });
+            });
+            
+            switch (selectedExportFormat) {
+                case 'csv':
+                    const headers = Object.keys(allData[0] || {}).join(',');
+                    const rows = allData.map(row => Object.values(row).join(','));
+                    content = headers + '\\n' + rows.join('\\n');
+                    filename = 'realtime-data.csv';
+                    break;
+                    
+                case 'json':
+                    content = JSON.stringify(allData, null, 2);
+                    filename = 'realtime-data.json';
+                    break;
+                    
+                case 'excel':
+                    // For demo purposes, export as CSV with Excel-friendly format
+                    content = allData.map(row => Object.values(row).join('\\t')).join('\\n');
+                    filename = 'realtime-data.xls';
+                    break;
+            }
+            
+            // Create download
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            alert(`Data exported as ${filename} (${allData.length} records)`);
+        }
+
+        // **LOADING SCREEN**
     </script>
 </body>
 </html>
