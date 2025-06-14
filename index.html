@@ -2277,6 +2277,236 @@
             }
         }
         
+        /* Database Demo Styles */
+        .db-connection-status {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+        
+        .connection-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .status-dot.connected {
+            background: #22c55e;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .db-schema-browser {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+        
+        .db-schema-browser h4 {
+            margin: 0 0 12px 0;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .schema-tree {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .schema-table {
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .table-header:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .table-icon {
+            font-size: 16px;
+        }
+        
+        .table-name {
+            flex: 1;
+            color: white;
+        }
+        
+        .table-count {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .table-columns {
+            padding: 8px 12px;
+        }
+        
+        .column {
+            padding: 4px 0;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            color: rgba(255, 255, 255, 0.8);
+            border-left: 2px solid rgba(74, 144, 226, 0.3);
+            padding-left: 8px;
+            margin-bottom: 2px;
+        }
+        
+        .quick-queries h4 {
+            margin: 0 0 12px 0;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .query-btn {
+            display: block;
+            width: 100%;
+            background: rgba(74, 144, 226, 0.2);
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 12px;
+            margin-bottom: 8px;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+        
+        .query-btn:hover {
+            background: rgba(74, 144, 226, 0.3);
+            transform: translateX(4px);
+        }
+        
+        .sql-editor {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .run-query-btn {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .run-query-btn:hover {
+            background: rgba(34, 197, 94, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .sql-textarea {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+        }
+        
+        .sql-textarea:focus {
+            border-color: rgba(74, 144, 226, 0.5);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+        
+        .query-results {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .results-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .results-content {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            overflow: auto;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        .results-table th {
+            background: rgba(74, 144, 226, 0.3);
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .results-table td {
+            padding: 6px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .results-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .query-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            color: #fca5a5;
+        }
+        
         /* Live Code Playground */
         .playground-section {
             background: var(--dark);
@@ -3848,6 +4078,8 @@ console.log('Reading demo.txt:', readResource('file://demo.txt'));`;
             // Initialize demo functionality
             if (demoType === 'filesystem') {
                 initFilesystemDemo();
+            } else if (demoType === 'database') {
+                initDatabaseDemo();
             }
         }
         
@@ -4199,21 +4431,575 @@ This is a demonstration of how MCP (Model Context Protocol) can interact with yo
             }
         }
 
+        // **DATABASE DEMO FUNCTIONALITY**
+        let currentDatabase = null;
+        
+        // Sample database data
+        const sampleData = {
+            users: [
+                { id: 1, name: 'Alice Johnson', email: 'alice@example.com', created_at: '2024-01-15 10:30:00' },
+                { id: 2, name: 'Bob Smith', email: 'bob@example.com', created_at: '2024-02-20 14:15:00' },
+                { id: 3, name: 'Carol Wilson', email: 'carol@example.com', created_at: '2024-03-10 09:45:00' },
+                { id: 4, name: 'David Brown', email: 'david@example.com', created_at: '2024-04-05 16:20:00' },
+                { id: 5, name: 'Eva Davis', email: 'eva@example.com', created_at: '2024-05-12 11:10:00' }
+            ],
+            orders: [
+                { id: 1, user_id: 1, product: 'Laptop Pro', amount: 1299.99, order_date: '2024-06-01 10:00:00' },
+                { id: 2, user_id: 2, product: 'Wireless Mouse', amount: 29.99, order_date: '2024-06-02 15:30:00' },
+                { id: 3, user_id: 1, product: 'USB-C Hub', amount: 79.99, order_date: '2024-06-03 09:15:00' },
+                { id: 4, user_id: 3, product: 'Monitor 4K', amount: 399.99, order_date: '2024-06-04 14:45:00' },
+                { id: 5, user_id: 4, product: 'Keyboard RGB', amount: 129.99, order_date: '2024-06-05 11:20:00' },
+                { id: 6, user_id: 2, product: 'Webcam HD', amount: 89.99, order_date: '2024-06-06 16:10:00' },
+                { id: 7, user_id: 5, product: 'Headset Pro', amount: 199.99, order_date: '2024-06-07 13:00:00' },
+                { id: 8, user_id: 1, product: 'Phone Case', amount: 19.99, order_date: '2024-06-08 10:30:00' },
+                { id: 9, user_id: 3, product: 'Tablet Stand', amount: 49.99, order_date: '2024-06-09 12:45:00' },
+                { id: 10, user_id: 4, product: 'Power Bank', amount: 59.99, order_date: '2024-06-10 08:20:00' },
+                { id: 11, user_id: 5, product: 'Wireless Charger', amount: 39.99, order_date: '2024-06-11 17:15:00' },
+                { id: 12, user_id: 2, product: 'Cable Kit', amount: 24.99, order_date: '2024-06-12 14:30:00' }
+            ],
+            products: [
+                { id: 1, name: 'Laptop Pro', price: 1299.99, category: 'Electronics', stock: 15 },
+                { id: 2, name: 'Wireless Mouse', price: 29.99, category: 'Accessories', stock: 50 },
+                { id: 3, name: 'USB-C Hub', price: 79.99, category: 'Accessories', stock: 25 },
+                { id: 4, name: 'Monitor 4K', price: 399.99, category: 'Electronics', stock: 8 },
+                { id: 5, name: 'Keyboard RGB', price: 129.99, category: 'Accessories', stock: 20 },
+                { id: 6, name: 'Webcam HD', price: 89.99, category: 'Electronics', stock: 12 },
+                { id: 7, name: 'Headset Pro', price: 199.99, category: 'Audio', stock: 18 },
+                { id: 8, name: 'Phone Case', price: 19.99, category: 'Accessories', stock: 100 }
+            ]
+        };
+
+        function initDatabaseDemo() {
+            // Initialize the database
+            currentDatabase = sampleData;
+            
+            // Set up table expansion
+            document.querySelectorAll('.schema-table').forEach(table => {
+                const header = table.querySelector('.table-header');
+                const columns = table.querySelector('.table-columns');
+                
+                header.addEventListener('click', () => {
+                    const isExpanded = columns.style.display === 'block';
+                    columns.style.display = isExpanded ? 'none' : 'block';
+                });
+                
+                // Expand first table by default
+                if (table.dataset.table === 'users') {
+                    columns.style.display = 'block';
+                }
+            });
+        }
+
+        function runQuickQuery(query) {
+            const sqlEditor = document.getElementById('sqlEditor');
+            if (sqlEditor) {
+                sqlEditor.value = query;
+                executeQuery();
+            }
+        }
+
+        function executeQuery() {
+            const sqlEditor = document.getElementById('sqlEditor');
+            const query = sqlEditor.value.trim();
+            
+            if (!query) {
+                showQueryError('Please enter a SQL query');
+                return;
+            }
+
+            try {
+                const result = executeSQL(query);
+                displayQueryResults(result, query);
+                addDbProtocolMessage(query, result);
+                
+                // Switch to results tab
+                switchDbTab('results');
+            } catch (error) {
+                showQueryError(error.message);
+                addDbProtocolMessage(query, null, error.message);
+            }
+        }
+
+        function executeSQL(query) {
+            // Simple SQL parser for demo purposes
+            const normalizedQuery = query.toLowerCase().trim();
+            
+            if (normalizedQuery.startsWith('select')) {
+                return executeSelect(query);
+            } else if (normalizedQuery.startsWith('insert')) {
+                return executeInsert(query);
+            } else if (normalizedQuery.startsWith('update')) {
+                return executeUpdate(query);
+            } else if (normalizedQuery.startsWith('delete')) {
+                return executeDelete(query);
+            } else {
+                throw new Error('Unsupported SQL operation. This demo supports SELECT, INSERT, UPDATE, DELETE.');
+            }
+        }
+
+        function executeSelect(query) {
+            // Parse basic SELECT queries
+            const normalizedQuery = query.toLowerCase();
+            
+            // Extract table name
+            let tableName = '';
+            const fromMatch = normalizedQuery.match(/from\\s+(\\w+)/);
+            if (fromMatch) {
+                tableName = fromMatch[1];
+            }
+            
+            if (!currentDatabase[tableName]) {
+                throw new Error(`Table '${tableName}' does not exist`);
+            }
+            
+            let data = [...currentDatabase[tableName]];
+            
+            // Handle JOINs (simplified)
+            if (normalizedQuery.includes('join')) {
+                data = handleJoins(query, data);
+            }
+            
+            // Handle WHERE clause (simplified)
+            if (normalizedQuery.includes('where')) {
+                data = handleWhere(query, data);
+            }
+            
+            // Handle GROUP BY (simplified)
+            if (normalizedQuery.includes('group by')) {
+                data = handleGroupBy(query, data);
+            }
+            
+            // Handle ORDER BY (simplified)
+            if (normalizedQuery.includes('order by')) {
+                data = handleOrderBy(query, data);
+            }
+            
+            // Handle LIMIT (simplified)
+            if (normalizedQuery.includes('limit')) {
+                const limitMatch = normalizedQuery.match(/limit\\s+(\\d+)/);
+                if (limitMatch) {
+                    data = data.slice(0, parseInt(limitMatch[1]));
+                }
+            }
+            
+            return {
+                type: 'select',
+                data: data,
+                rowCount: data.length
+            };
+        }
+
+        function handleJoins(query, data) {
+            // Simplified JOIN implementation for common cases
+            const normalizedQuery = query.toLowerCase();
+            
+            if (normalizedQuery.includes('users') && normalizedQuery.includes('orders')) {
+                // JOIN users and orders
+                const result = [];
+                currentDatabase.users.forEach(user => {
+                    const userOrders = currentDatabase.orders.filter(order => order.user_id === user.id);
+                    if (userOrders.length > 0) {
+                        userOrders.forEach(order => {
+                            result.push({ ...user, ...order });
+                        });
+                    } else if (normalizedQuery.includes('left join')) {
+                        result.push({ ...user, order_id: null, product: null, amount: null, order_date: null });
+                    }
+                });
+                return result;
+            }
+            
+            return data;
+        }
+
+        function handleWhere(query, data) {
+            // Very simplified WHERE clause handling
+            const whereMatch = query.match(/where\\s+(.+?)(?:\\s+order|\\s+group|\\s+limit|$)/i);
+            if (whereMatch) {
+                const condition = whereMatch[1].trim();
+                
+                // Handle stock > 0 condition
+                if (condition.includes('stock > 0')) {
+                    return data.filter(item => item.stock && item.stock > 0);
+                }
+                
+                // Handle LIMIT in subquery
+                if (condition.includes('LIMIT')) {
+                    const limitMatch = condition.match(/LIMIT\\s+(\\d+)/i);
+                    if (limitMatch) {
+                        return data.slice(0, parseInt(limitMatch[1]));
+                    }
+                }
+            }
+            
+            return data;
+        }
+
+        function handleGroupBy(query, data) {
+            // Simplified GROUP BY with COUNT
+            if (query.toLowerCase().includes('count(o.id)') && query.toLowerCase().includes('group by u.id')) {
+                // User order counts
+                const userCounts = {};
+                
+                data.forEach(item => {
+                    const key = item.name || item.user_id;
+                    if (!userCounts[key]) {
+                        userCounts[key] = { name: item.name || `User ${item.user_id}`, order_count: 0 };
+                    }
+                    if (item.id && item.user_id) {
+                        userCounts[key].order_count++;
+                    }
+                });
+                
+                return Object.values(userCounts);
+            }
+            
+            return data;
+        }
+
+        function handleOrderBy(query, data) {
+            const orderMatch = query.match(/order by\\s+(\\w+)(?:\\s+(asc|desc))?/i);
+            if (orderMatch) {
+                const column = orderMatch[1];
+                const direction = (orderMatch[2] || 'asc').toLowerCase();
+                
+                return data.sort((a, b) => {
+                    const aVal = a[column];
+                    const bVal = b[column];
+                    
+                    if (direction === 'desc') {
+                        return bVal > aVal ? 1 : -1;
+                    } else {
+                        return aVal > bVal ? 1 : -1;
+                    }
+                });
+            }
+            
+            return data;
+        }
+
+        function executeInsert(query) {
+            // Demo INSERT - just return success message
+            return {
+                type: 'insert',
+                message: 'INSERT executed successfully (demo mode)',
+                rowsAffected: 1
+            };
+        }
+
+        function executeUpdate(query) {
+            // Demo UPDATE - just return success message
+            return {
+                type: 'update',
+                message: 'UPDATE executed successfully (demo mode)',
+                rowsAffected: 1
+            };
+        }
+
+        function executeDelete(query) {
+            // Demo DELETE - just return success message
+            return {
+                type: 'delete',
+                message: 'DELETE executed successfully (demo mode)',
+                rowsAffected: 1
+            };
+        }
+
+        function displayQueryResults(result, query) {
+            const resultsInfo = document.getElementById('resultsInfo');
+            const resultsContent = document.getElementById('resultsContent');
+            
+            if (result.type === 'select' && result.data && result.data.length > 0) {
+                resultsInfo.textContent = `Query executed successfully. ${result.rowCount} rows returned.`;
+                
+                // Create table
+                const table = document.createElement('table');
+                table.className = 'results-table';
+                
+                // Create header
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                const columns = Object.keys(result.data[0]);
+                
+                columns.forEach(column => {
+                    const th = document.createElement('th');
+                    th.textContent = column;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+                
+                // Create body
+                const tbody = document.createElement('tbody');
+                result.data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    columns.forEach(column => {
+                        const td = document.createElement('td');
+                        td.textContent = row[column] || '';
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+                table.appendChild(tbody);
+                
+                resultsContent.innerHTML = '';
+                resultsContent.appendChild(table);
+                
+            } else if (result.type === 'select') {
+                resultsInfo.textContent = 'Query executed successfully. No rows returned.';
+                resultsContent.innerHTML = '<p style="opacity: 0.7; text-align: center; padding: 40px;">No results found</p>';
+                
+            } else {
+                resultsInfo.textContent = result.message;
+                resultsContent.innerHTML = `<p style="color: #22c55e; text-align: center; padding: 40px;">${result.message}</p>`;
+            }
+        }
+
+        function showQueryError(error) {
+            const resultsInfo = document.getElementById('resultsInfo');
+            const resultsContent = document.getElementById('resultsContent');
+            
+            resultsInfo.textContent = 'Query failed';
+            resultsContent.innerHTML = `<div class="query-error"><strong>Error:</strong> ${error}</div>`;
+            
+            // Switch to results tab
+            switchDbTab('results');
+        }
+
+        function addDbProtocolMessage(query, result, error) {
+            const protocolLog = document.getElementById('dbProtocolLog');
+            if (!protocolLog) return;
+
+            const timestamp = new Date().toISOString();
+            const requestId = Math.floor(Math.random() * 1000);
+
+            const requestMessage = {
+                jsonrpc: "2.0",
+                id: requestId,
+                method: "tools/call",
+                params: {
+                    name: "query_database",
+                    arguments: {
+                        query: query
+                    }
+                }
+            };
+
+            let responseMessage;
+            if (error) {
+                responseMessage = {
+                    jsonrpc: "2.0",
+                    id: requestId,
+                    error: {
+                        code: -1,
+                        message: error
+                    }
+                };
+            } else {
+                responseMessage = {
+                    jsonrpc: "2.0",
+                    id: requestId,
+                    result: {
+                        content: [{
+                            type: "text",
+                            text: result.type === 'select' ? 
+                                  `Query executed successfully. ${result.rowCount} rows returned.` :
+                                  result.message
+                        }],
+                        isError: false
+                    }
+                };
+            }
+
+            // Add request message
+            const requestDiv = document.createElement('div');
+            requestDiv.className = 'protocol-message';
+            requestDiv.innerHTML = `
+                <div class="message-header">Request (${timestamp}):</div>
+                <pre class="message-content">${JSON.stringify(requestMessage, null, 2)}</pre>
+            `;
+
+            // Add response message
+            const responseDiv = document.createElement('div');
+            responseDiv.className = error ? 'protocol-message error' : 'protocol-message response';
+            responseDiv.innerHTML = `
+                <div class="message-header">Response:</div>
+                <pre class="message-content">${JSON.stringify(responseMessage, null, 2)}</pre>
+            `;
+
+            // Insert at the top
+            protocolLog.insertBefore(responseDiv, protocolLog.firstChild);
+            protocolLog.insertBefore(requestDiv, protocolLog.firstChild);
+
+            // Limit to 6 messages (3 request/response pairs)
+            const messages = protocolLog.querySelectorAll('.protocol-message');
+            if (messages.length > 6) {
+                for (let i = 6; i < messages.length; i++) {
+                    messages[i].remove();
+                }
+            }
+        }
+
+        function switchDbTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.demo-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
         // **PLACEHOLDER DEMO GENERATORS** (To be implemented in next checkpoints)
         function generateDatabaseDemo() {
             return `
-                <div style="text-align: center; padding: 60px 20px;">
-                    <h3>🗄️ Database Connection Demo</h3>
-                    <p style="opacity: 0.8; margin-bottom: 20px;">Coming in Checkpoint 2...</p>
-                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px;">
-                        <p>This demo will include:</p>
-                        <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
-                            <li>SQLite in-browser database</li>
-                            <li>SQL query editor with syntax highlighting</li>
-                            <li>Sample database schemas</li>
-                            <li>MCP protocol visualization</li>
-                            <li>CRUD operation examples</li>
-                        </ul>
+                <div class="demo-container">
+                    <div class="demo-split">
+                        <div class="demo-left">
+                            <h3>🗄️ Database Connection</h3>
+                            <div class="db-connection-status">
+                                <div class="connection-indicator">
+                                    <span class="status-dot connected"></span>
+                                    <span>Connected to demo SQLite database</span>
+                                </div>
+                            </div>
+                            
+                            <div class="db-schema-browser">
+                                <h4>Database Schema</h4>
+                                <div class="schema-tree">
+                                    <div class="schema-table" data-table="users">
+                                        <div class="table-header">
+                                            <span class="table-icon">👥</span>
+                                            <span class="table-name">users</span>
+                                            <span class="table-count">(5 rows)</span>
+                                        </div>
+                                        <div class="table-columns">
+                                            <div class="column">id (INTEGER PRIMARY KEY)</div>
+                                            <div class="column">name (TEXT)</div>
+                                            <div class="column">email (TEXT)</div>
+                                            <div class="column">created_at (DATETIME)</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="schema-table" data-table="orders">
+                                        <div class="table-header">
+                                            <span class="table-icon">📦</span>
+                                            <span class="table-name">orders</span>
+                                            <span class="table-count">(12 rows)</span>
+                                        </div>
+                                        <div class="table-columns">
+                                            <div class="column">id (INTEGER PRIMARY KEY)</div>
+                                            <div class="column">user_id (INTEGER)</div>
+                                            <div class="column">product (TEXT)</div>
+                                            <div class="column">amount (DECIMAL)</div>
+                                            <div class="column">order_date (DATETIME)</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="schema-table" data-table="products">
+                                        <div class="table-header">
+                                            <span class="table-icon">🛍️</span>
+                                            <span class="table-name">products</span>
+                                            <span class="table-count">(8 rows)</span>
+                                        </div>
+                                        <div class="table-columns">
+                                            <div class="column">id (INTEGER PRIMARY KEY)</div>
+                                            <div class="column">name (TEXT)</div>
+                                            <div class="column">price (DECIMAL)</div>
+                                            <div class="column">category (TEXT)</div>
+                                            <div class="column">stock (INTEGER)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="quick-queries">
+                                <h4>Quick Queries</h4>
+                                <button class="query-btn" onclick="runQuickQuery('SELECT * FROM users LIMIT 5')">Show Users</button>
+                                <button class="query-btn" onclick="runQuickQuery('SELECT * FROM orders ORDER BY order_date DESC LIMIT 5')">Recent Orders</button>
+                                <button class="query-btn" onclick="runQuickQuery('SELECT p.name, p.price, p.stock FROM products p WHERE p.stock > 0')">Available Products</button>
+                                <button class="query-btn" onclick="runQuickQuery('SELECT u.name, COUNT(o.id) as order_count FROM users u LEFT JOIN orders o ON u.id = o.user_id GROUP BY u.id, u.name')">User Statistics</button>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-right">
+                            <div class="demo-tabs">
+                                <button class="demo-tab active" onclick="switchDbTab('query')">💻 SQL Query</button>
+                                <button class="demo-tab" onclick="switchDbTab('results')">📊 Results</button>
+                                <button class="demo-tab" onclick="switchDbTab('protocol')">🔌 MCP Protocol</button>
+                            </div>
+                            
+                            <div class="demo-content">
+                                <div id="queryTab" class="tab-content active">
+                                    <div class="sql-editor">
+                                        <div class="editor-header">
+                                            <span>SQL Query Editor</span>
+                                            <button class="run-query-btn" onclick="executeQuery()">▶ Run Query</button>
+                                        </div>
+                                        <textarea id="sqlEditor" class="sql-textarea" placeholder="Enter your SQL query here...
+Example:
+SELECT u.name, u.email, COUNT(o.id) as total_orders
+FROM users u 
+LEFT JOIN orders o ON u.id = o.user_id 
+GROUP BY u.id, u.name, u.email
+ORDER BY total_orders DESC;">SELECT * FROM users LIMIT 5;</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div id="resultsTab" class="tab-content">
+                                    <div class="query-results">
+                                        <div class="results-header">
+                                            <span id="resultsInfo">Execute a query to see results</span>
+                                        </div>
+                                        <div class="results-content" id="resultsContent">
+                                            <p style="opacity: 0.7; text-align: center; padding: 40px;">
+                                                Run a SQL query to see the results here
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="protocolTab" class="tab-content">
+                                    <div class="protocol-viewer">
+                                        <h4>MCP Protocol Messages</h4>
+                                        <div class="protocol-log" id="dbProtocolLog">
+                                            <div class="protocol-message">
+                                                <div class="message-header">Request:</div>
+                                                <pre class="message-content">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "query_database",
+    "arguments": {
+      "query": "SELECT * FROM users LIMIT 5"
+    }
+  }
+}</pre>
+                                            </div>
+                                            <div class="protocol-message response">
+                                                <div class="message-header">Response:</div>
+                                                <pre class="message-content">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [{
+      "type": "text",
+      "text": "Query executed successfully. 5 rows returned."
+    }],
+    "isError": false
+  }
+}</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
