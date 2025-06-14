@@ -208,6 +208,22 @@ PRIORITY TASKS FOR AGENT:
    - High contrast mode support
    - Keyboard shortcuts documentation
 
+GIT WORKFLOW FOR AGENTS:
+- **Repository**: https://github.com/Arnarsson/mcphubtest.git
+- **Branch**: feature/interactive-demos (same branch as main developer)
+- **Coordination**: Pull latest changes before starting work, commit frequently
+- **File**: Work on /Users/sven/Desktop/MCP/projects/MCPHUB/mcp-hub-multilingual/index.html
+- **Commit Strategy**: Make small, focused commits with clear messages
+- **Conflict Resolution**: If conflicts arise, coordinate with main developer
+
+WORKFLOW STEPS:
+1. `git pull github feature/interactive-demos` (get latest changes)
+2. Work on assigned tasks in index.html
+3. `git add index.html` (stage changes)
+4. `git commit -m "🤖 [Agent]: Brief description of changes"`
+5. `git push github feature/interactive-demos` (push changes)
+6. Repeat frequently to avoid large conflicts
+
 CONSTRAINTS:
 - Follow existing modal structure and CSS patterns from Checkpoints 1 & 2
 - Use existing design tokens and glassmorphism effects
@@ -253,6 +269,11 @@ PRIORITY TASKS FOR AGENT:
    - Optimize content spacing in all demo modals
    - Add visual separators between demo sections
    - Improve readability of protocol messages
+
+GIT WORKFLOW: Same as Frontend Functionality Agent
+- Repository: https://github.com/Arnarsson/mcphubtest.git
+- Branch: feature/interactive-demos
+- Commit prefix: "🎨 [Design]: Description"
 
 CONSTRAINTS:
 - Use existing CSS custom properties (--radius-*, --dark, etc.)
@@ -301,6 +322,11 @@ PRIORITY TASKS FOR AGENT:
    - Add success animations for completed operations
    - Implement progressive error recovery
 
+GIT WORKFLOW: Same as other agents
+- Repository: https://github.com/Arnarsson/mcphubtest.git  
+- Branch: feature/interactive-demos
+- Commit prefix: "🧭 [UX]: Description"
+
 CONSTRAINTS:
 - Keep cognitive load minimal - demos should feel simple
 - Maintain educational focus - users should learn MCP concepts
@@ -345,6 +371,11 @@ PRIORITY TASKS FOR AGENT:
    - Create chapter breakdowns for video navigation
    - Design interactive code challenges to accompany videos
    - Plan progressive learning path across all demos
+
+GIT WORKFLOW: Same as other agents
+- Repository: https://github.com/Arnarsson/mcphubtest.git
+- Branch: feature/interactive-demos  
+- Commit prefix: "📝 [Content]: Description"
 
 CONSTRAINTS:
 - All MCP protocol examples must be technically accurate
