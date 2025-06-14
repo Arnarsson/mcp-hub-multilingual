@@ -22,6 +22,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Chart.js for real-time demo -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    
     <!-- Loading Screen -->
     <style>
         #loading-screen {
@@ -2842,6 +2846,692 @@
             color: var(--gray-400);
             line-height: 1.6;
         }
+
+        /* Real-time Demo Styles */
+        .stream-connection-status {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+
+        .stream-selector {
+            margin-bottom: 20px;
+        }
+
+        .stream-selector h4 {
+            margin: 0 0 12px 0;
+            color: white;
+            font-size: 16px;
+        }
+
+        .stream-list {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .stream-item {
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .stream-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .stream-item.subscribed {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .stream-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .stream-icon {
+            font-size: 16px;
+        }
+
+        .stream-name {
+            flex: 1;
+            color: white;
+            font-weight: 600;
+        }
+
+        .stream-count {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .stream-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .subscribe-btn {
+            background: rgba(74, 144, 226, 0.2);
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .subscribe-btn:hover {
+            background: rgba(74, 144, 226, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .stream-item.subscribed .subscribe-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .stream-item.subscribed .subscribe-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .stream-frequency {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        .active-subscriptions h4 {
+            margin: 0 0 12px 0;
+            color: white;
+            font-size: 16px;
+        }
+
+        .subscriptions-list {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            min-height: 80px;
+        }
+
+        .subscription-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .subscription-icon {
+            font-size: 16px;
+        }
+
+        .subscription-name {
+            flex: 1;
+            color: white;
+            font-weight: 500;
+        }
+
+        .subscription-status {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chart-control-btn {
+            background: rgba(74, 144, 226, 0.2);
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .chart-control-btn:hover {
+            background: rgba(74, 144, 226, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .chart-control-btn.paused {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .chart-wrapper {
+            flex: 1;
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            min-height: 300px;
+        }
+
+        .chart-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-sm);
+        }
+
+        .placeholder-content {
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        .placeholder-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        #realtimeChart {
+            display: none;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .live-data-viewer {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .data-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .data-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .data-stream {
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+        }
+
+        .data-entry {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid rgba(74, 144, 226, 0.5);
+            border-radius: var(--radius-sm);
+            animation: slideInFromTop 0.3s ease-out;
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .data-timestamp {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 4px;
+        }
+
+        .data-stream-type {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .data-content {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.9);
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .status-dot.connecting {
+            background: #f59e0b;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .status-dot.disconnected {
+            background: #ef4444;
+            animation: none;
+        }
+
+        /* Enhanced mobile responsiveness for real-time demo */
+        @media (max-width: 768px) {
+            .stream-controls {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .chart-controls {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .data-stats {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+
+        /* UX Enhancement Styles */
+        /* Modal Dialog System */
+        .ux-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .ux-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .ux-modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: scaleIn 0.3s ease-out;
+            color: var(--gray-800);
+        }
+
+        [data-theme="dark"] .ux-modal-content {
+            background: rgba(30, 41, 59, 0.95);
+            color: var(--gray-100);
+        }
+
+        .ux-modal-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .ux-modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--gray-900);
+        }
+
+        [data-theme="dark"] .ux-modal-title {
+            color: var(--gray-100);
+        }
+
+        .ux-modal-message {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            color: var(--gray-700);
+        }
+
+        [data-theme="dark"] .ux-modal-message {
+            color: var(--gray-300);
+        }
+
+        .ux-modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .ux-modal-btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: none;
+            font-size: 14px;
+        }
+
+        .ux-modal-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .ux-modal-btn.primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .ux-modal-btn.secondary {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--gray-700);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .ux-modal-btn.secondary:hover {
+            background: rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        [data-theme="dark"] .ux-modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--gray-300);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="dark"] .ux-modal-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Tooltip System */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: nowrap;
+            max-width: 200px;
+            white-space: normal;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition);
+            pointer-events: none;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+            margin-bottom: -4px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition);
+        }
+
+        .tooltip:hover::before,
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-4px);
+        }
+
+        /* Demo Progress Indicators */
+        .demo-progress {
+            position: absolute;
+            top: 16px;
+            right: 80px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all var(--transition);
+        }
+
+        .progress-dot.active {
+            background: #10b981;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+        }
+
+        .progress-dot.completed {
+            background: #10b981;
+        }
+
+        /* Help System */
+        .help-trigger {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all var(--transition);
+        }
+
+        .help-trigger:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .help-panel {
+            position: absolute;
+            top: 60px;
+            right: 16px;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            color: var(--gray-800);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all var(--transition);
+            z-index: 100;
+        }
+
+        [data-theme="dark"] .help-panel {
+            background: rgba(30, 41, 59, 0.95);
+            color: var(--gray-100);
+        }
+
+        .help-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .help-panel h4 {
+            margin: 0 0 12px 0;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .help-panel ul {
+            margin: 0;
+            padding-left: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .help-panel li {
+            margin-bottom: 8px;
+        }
+
+        /* Success/Error animations */
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        .success-animation {
+            animation: successPulse 0.6s ease-out;
+        }
+
+        .error-animation {
+            animation: errorShake 0.5s ease-out;
+        }
+
+        /* Input validation styles */
+        .input-container {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            transition: all var(--transition);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .input-field.invalid {
+            border-color: #ef4444;
+            animation: errorShake 0.5s ease-out;
+        }
+
+        .input-error {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .input-field.invalid + .input-error {
+            display: block;
+        }
+
+        /* Demo completion tracking */
+        .demo-completion {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .completion-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 10px;
+        }
+
+        /* Loading states */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -2972,10 +3662,44 @@
         <div class="demo-modal-content">
             <div class="demo-modal-header">
                 <h2 id="demoModalTitle">Demo</h2>
+                <div class="demo-progress" id="demoProgress">
+                    <span>Progress:</span>
+                    <div class="progress-dot" data-demo="filesystem"></div>
+                    <div class="progress-dot active" data-demo="current"></div>
+                    <div class="progress-dot" data-demo="database"></div>
+                    <div class="progress-dot" data-demo="realtime"></div>
+                </div>
+                <div class="help-trigger tooltip" data-tooltip="Get help with this demo" onclick="toggleHelp()">?</div>
                 <button class="demo-modal-close" onclick="closeDemoModal()">&times;</button>
+            </div>
+            <div class="help-panel" id="helpPanel">
+                <h4>🚀 Demo Guide</h4>
+                <ul id="helpContent">
+                    <li>Click elements to interact with the demo</li>
+                    <li>Watch the MCP Protocol tab for real-time messages</li>
+                    <li>Try different operations to see how MCP works</li>
+                    <li>Use tooltips for explanations of MCP concepts</li>
+                </ul>
             </div>
             <div class="demo-modal-body" id="demoModalBody">
                 <!-- Dynamic content will be inserted here -->
+            </div>
+            <div class="demo-completion" id="demoCompletion">
+                <span>Demo Status:</span>
+                <div class="completion-badge" id="completionBadge">Getting Started</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UX Enhancement Modal -->
+    <div id="uxModal" class="ux-modal">
+        <div class="ux-modal-content">
+            <div class="ux-modal-icon" id="uxModalIcon">✅</div>
+            <h3 class="ux-modal-title" id="uxModalTitle">Success</h3>
+            <p class="ux-modal-message" id="uxModalMessage">Operation completed successfully!</p>
+            <div class="ux-modal-actions">
+                <button class="ux-modal-btn primary" id="uxModalPrimary" onclick="closeUxModal()">OK</button>
+                <button class="ux-modal-btn secondary" id="uxModalSecondary" onclick="closeUxModal()" style="display: none;">Cancel</button>
             </div>
         </div>
     </div>
@@ -4080,7 +4804,13 @@ console.log('Reading demo.txt:', readResource('file://demo.txt'));`;
                 initFilesystemDemo();
             } else if (demoType === 'database') {
                 initDatabaseDemo();
+            } else if (demoType === 'realtime') {
+                initRealtimeDemo();
             }
+            
+            // Initialize UX enhancements
+            updateDemoProgress(demoType);
+            initTooltips();
         }
         
         function closeDemoModal() {
@@ -5024,23 +5754,666 @@ ORDER BY total_orders DESC;">SELECT * FROM users LIMIT 5;</textarea>
             `;
         }
 
+        // **REAL-TIME DATA DEMO IMPLEMENTATION**
         function generateRealtimeDemo() {
             return `
-                <div style="text-align: center; padding: 60px 20px;">
-                    <h3>📊 Real-time Data Demo</h3>
-                    <p style="opacity: 0.8; margin-bottom: 20px;">Coming in Checkpoint 4...</p>
-                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px;">
-                        <p>This demo will include:</p>
-                        <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
-                            <li>WebSocket simulation</li>
-                            <li>Live data streams (stocks, sensors)</li>
-                            <li>Real-time charts with Chart.js</li>
-                            <li>Subscription/unsubscription controls</li>
-                            <li>Data filtering and aggregation</li>
-                        </ul>
+                <div class="demo-container">
+                    <div class="demo-split">
+                        <div class="demo-left">
+                            <h3>📊 Real-time Data Streams</h3>
+                            
+                            <!-- Connection Status -->
+                            <div class="stream-connection-status">
+                                <div class="connection-indicator">
+                                    <span class="status-dot" id="streamStatus"></span>
+                                    <span id="streamStatusText">Connecting to streams...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Data Stream Selector -->
+                            <div class="stream-selector">
+                                <h4>📡 Available Data Streams</h4>
+                                <div class="stream-list">
+                                    <div class="stream-item" data-stream="stocks">
+                                        <div class="stream-header">
+                                            <span class="stream-icon">📈</span>
+                                            <span class="stream-name">Stock Prices</span>
+                                            <span class="stream-count">(5 symbols)</span>
+                                        </div>
+                                        <div class="stream-controls">
+                                            <button class="subscribe-btn" onclick="toggleStream('stocks')">Subscribe</button>
+                                            <span class="stream-frequency">~2/sec</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stream-item" data-stream="sensors">
+                                        <div class="stream-header">
+                                            <span class="stream-icon">🌡️</span>
+                                            <span class="stream-name">IoT Sensors</span>
+                                            <span class="stream-count">(3 devices)</span>
+                                        </div>
+                                        <div class="stream-controls">
+                                            <button class="subscribe-btn" onclick="toggleStream('sensors')">Subscribe</button>
+                                            <span class="stream-frequency">~1/sec</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stream-item" data-stream="logs">
+                                        <div class="stream-header">
+                                            <span class="stream-icon">📋</span>
+                                            <span class="stream-name">System Logs</span>
+                                            <span class="stream-count">(mixed types)</span>
+                                        </div>
+                                        <div class="stream-controls">
+                                            <button class="subscribe-btn" onclick="toggleStream('logs')">Subscribe</button>
+                                            <span class="stream-frequency">~3/sec</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Active Subscriptions -->
+                            <div class="active-subscriptions">
+                                <h4>🔔 Active Subscriptions</h4>
+                                <div id="activeSubscriptionsList" class="subscriptions-list">
+                                    <p style="opacity: 0.7; text-align: center; padding: 20px; font-size: 14px;">
+                                        No active subscriptions<br>
+                                        <span style="font-size: 12px;">Subscribe to a data stream to see real-time updates</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-right">
+                            <div class="demo-tabs">
+                                <button class="demo-tab active" onclick="switchRealtimeTab('visualization')">📊 Visualization</button>
+                                <button class="demo-tab" onclick="switchRealtimeTab('data')">📋 Live Data</button>
+                                <button class="demo-tab" onclick="switchRealtimeTab('protocol')">🔌 MCP Protocol</button>
+                            </div>
+                            
+                            <div class="demo-content">
+                                <div id="visualizationTab" class="tab-content active">
+                                    <div class="chart-container">
+                                        <div class="chart-header">
+                                            <span>Real-time Data Visualization</span>
+                                            <div class="chart-controls">
+                                                <button class="chart-control-btn" onclick="pauseChart()" id="pauseBtn">⏸️ Pause</button>
+                                                <button class="chart-control-btn" onclick="clearChart()">🗑️ Clear</button>
+                                            </div>
+                                        </div>
+                                        <div class="chart-wrapper">
+                                            <canvas id="realtimeChart" width="400" height="300"></canvas>
+                                            <div class="chart-placeholder" id="chartPlaceholder">
+                                                <div class="placeholder-content">
+                                                    <div class="placeholder-icon">📊</div>
+                                                    <p>Subscribe to a data stream to see real-time visualization</p>
+                                                    <p style="font-size: 12px; opacity: 0.7;">Charts will appear here as data flows in</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="dataTab" class="tab-content">
+                                    <div class="live-data-viewer">
+                                        <div class="data-header">
+                                            <span>Live Data Stream</span>
+                                            <div class="data-stats">
+                                                <span id="dataPointCount">0 points</span>
+                                                <span id="dataRate">0/sec</span>
+                                            </div>
+                                        </div>
+                                        <div class="data-stream" id="liveDataStream">
+                                            <div class="data-placeholder">
+                                                <p style="opacity: 0.7; text-align: center; padding: 40px;">
+                                                    Subscribe to a data stream to see live updates
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="protocolTab" class="tab-content">
+                                    <div class="protocol-viewer">
+                                        <h4>MCP Protocol Messages</h4>
+                                        <div class="protocol-log" id="realtimeProtocolLog">
+                                            <div class="protocol-message">
+                                                <div class="message-header">Initial Request:</div>
+                                                <pre class="message-content">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "notifications/initialize",
+  "params": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+      "streams": {
+        "subscribe": true,
+        "unsubscribe": true
+      }
+    }
+  }
+}</pre>
+                                            </div>
+                                            <div class="protocol-message response">
+                                                <div class="message-header">Response:</div>
+                                                <pre class="message-content">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+      "streams": {
+        "available": ["stocks", "sensors", "logs"],
+        "maxSubscriptions": 5
+      }
+    }
+  }
+}</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
+        }
+
+        // **REAL-TIME DEMO FUNCTIONALITY**
+        let activeStreams = new Set();
+        let streamIntervals = new Map();
+        let chartInstance = null;
+        let chartData = {
+            labels: [],
+            datasets: []
+        };
+        let dataPoints = [];
+        let dataPointCounter = 0;
+        let isPaused = false;
+        let streamStartTime = Date.now();
+
+        // Sample data generators
+        const streamGenerators = {
+            stocks: () => {
+                const symbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA'];
+                const basePrice = { AAPL: 150, GOOGL: 2500, MSFT: 300, AMZN: 3000, TSLA: 800 };
+                const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                const price = basePrice[symbol] + (Math.random() - 0.5) * 20;
+                return {
+                    symbol,
+                    price: price.toFixed(2),
+                    change: ((Math.random() - 0.5) * 5).toFixed(2),
+                    volume: Math.floor(Math.random() * 1000000),
+                    timestamp: new Date().toISOString()
+                };
+            },
+            
+            sensors: () => {
+                const sensors = ['temp-01', 'humid-02', 'press-03'];
+                const sensor = sensors[Math.floor(Math.random() * sensors.length)];
+                let value, unit;
+                
+                if (sensor.startsWith('temp')) {
+                    value = (20 + Math.random() * 15).toFixed(1);
+                    unit = '°C';
+                } else if (sensor.startsWith('humid')) {
+                    value = (30 + Math.random() * 40).toFixed(1);
+                    unit = '%';
+                } else {
+                    value = (1000 + Math.random() * 100).toFixed(1);
+                    unit = 'hPa';
+                }
+                
+                return {
+                    sensor_id: sensor,
+                    value: parseFloat(value),
+                    unit,
+                    location: 'Building-A',
+                    timestamp: new Date().toISOString()
+                };
+            },
+            
+            logs: () => {
+                const levels = ['INFO', 'WARN', 'ERROR', 'DEBUG'];
+                const services = ['auth-service', 'api-gateway', 'db-service', 'cache-service'];
+                const messages = [
+                    'Request processed successfully',
+                    'Connection established',
+                    'Cache miss for key',
+                    'Authentication successful',
+                    'Rate limit exceeded',
+                    'Database query executed',
+                    'User session created',
+                    'API endpoint called'
+                ];
+                
+                const level = levels[Math.floor(Math.random() * levels.length)];
+                const service = services[Math.floor(Math.random() * services.length)];
+                const message = messages[Math.floor(Math.random() * messages.length)];
+                
+                return {
+                    level,
+                    service,
+                    message,
+                    request_id: 'req_' + Math.random().toString(36).substr(2, 9),
+                    timestamp: new Date().toISOString()
+                };
+            }
+        };
+
+        function initRealtimeDemo() {
+            // Initialize Chart.js
+            const ctx = document.getElementById('realtimeChart');
+            if (ctx) {
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'second',
+                                    displayFormats: {
+                                        second: 'HH:mm:ss'
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Time',
+                                    color: 'rgba(255, 255, 255, 0.8)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.6)'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Value',
+                                    color: 'rgba(255, 255, 255, 0.8)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.6)'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.8)'
+                                }
+                            }
+                        },
+                        elements: {
+                            point: {
+                                radius: 3
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Update connection status
+            updateStreamStatus('connected');
+        }
+
+        function toggleStream(streamType) {
+            const streamItem = document.querySelector(`[data-stream="${streamType}"]`);
+            const subscribeBtn = streamItem.querySelector('.subscribe-btn');
+            
+            if (activeStreams.has(streamType)) {
+                // Unsubscribe
+                unsubscribeFromStream(streamType);
+                subscribeBtn.textContent = 'Subscribe';
+                streamItem.classList.remove('subscribed');
+            } else {
+                // Subscribe
+                subscribeToStream(streamType);
+                subscribeBtn.textContent = 'Unsubscribe';
+                streamItem.classList.add('subscribed');
+            }
+            
+            updateActiveSubscriptions();
+        }
+
+        function subscribeToStream(streamType) {
+            activeStreams.add(streamType);
+            
+            // Add to chart
+            const colors = {
+                stocks: { border: '#10b981', background: 'rgba(16, 185, 129, 0.1)' },
+                sensors: { border: '#f59e0b', background: 'rgba(245, 158, 11, 0.1)' },
+                logs: { border: '#8b5cf6', background: 'rgba(139, 92, 246, 0.1)' }
+            };
+            
+            const dataset = {
+                label: streamType.charAt(0).toUpperCase() + streamType.slice(1),
+                data: [],
+                borderColor: colors[streamType].border,
+                backgroundColor: colors[streamType].background,
+                fill: false,
+                tension: 0.1
+            };
+            
+            chartData.datasets.push(dataset);
+            
+            // Show chart
+            const placeholder = document.getElementById('chartPlaceholder');
+            const chart = document.getElementById('realtimeChart');
+            if (placeholder) placeholder.style.display = 'none';
+            if (chart) chart.style.display = 'block';
+            
+            // Start data generation
+            const frequency = { stocks: 500, sensors: 1000, logs: 333 }[streamType];
+            const interval = setInterval(() => {
+                if (!isPaused) {
+                    generateDataPoint(streamType);
+                }
+            }, frequency);
+            
+            streamIntervals.set(streamType, interval);
+            
+            // Add protocol message
+            addRealtimeProtocolMessage('subscribe', streamType);
+        }
+
+        function unsubscribeFromStream(streamType) {
+            activeStreams.delete(streamType);
+            
+            // Remove from chart
+            const datasetIndex = chartData.datasets.findIndex(d => d.label.toLowerCase() === streamType);
+            if (datasetIndex !== -1) {
+                chartData.datasets.splice(datasetIndex, 1);
+            }
+            
+            // Stop data generation
+            const interval = streamIntervals.get(streamType);
+            if (interval) {
+                clearInterval(interval);
+                streamIntervals.delete(streamType);
+            }
+            
+            // Hide chart if no active streams
+            if (activeStreams.size === 0) {
+                const placeholder = document.getElementById('chartPlaceholder');
+                const chart = document.getElementById('realtimeChart');
+                if (placeholder) placeholder.style.display = 'flex';
+                if (chart) chart.style.display = 'none';
+            }
+            
+            // Add protocol message
+            addRealtimeProtocolMessage('unsubscribe', streamType);
+        }
+
+        function generateDataPoint(streamType) {
+            const data = streamGenerators[streamType]();
+            const timestamp = new Date();
+            
+            // Add to chart
+            const dataset = chartData.datasets.find(d => d.label.toLowerCase() === streamType);
+            if (dataset) {
+                let value;
+                if (streamType === 'stocks') {
+                    value = parseFloat(data.price);
+                } else if (streamType === 'sensors') {
+                    value = data.value;
+                } else {
+                    value = ['INFO', 'WARN', 'ERROR', 'DEBUG'].indexOf(data.level);
+                }
+                
+                dataset.data.push({
+                    x: timestamp,
+                    y: value
+                });
+                
+                // Keep only last 50 points
+                if (dataset.data.length > 50) {
+                    dataset.data.shift();
+                }
+            }
+            
+            // Update chart
+            if (chartInstance) {
+                chartInstance.update('none');
+            }
+            
+            // Add to live data stream
+            addToLiveDataStream(streamType, data);
+            
+            // Update counters
+            dataPointCounter++;
+            updateDataStats();
+        }
+
+        function addToLiveDataStream(streamType, data) {
+            const liveDataStream = document.getElementById('liveDataStream');
+            if (!liveDataStream) return;
+            
+            // Remove placeholder
+            const placeholder = liveDataStream.querySelector('.data-placeholder');
+            if (placeholder) {
+                placeholder.remove();
+            }
+            
+            // Create data entry
+            const dataEntry = document.createElement('div');
+            dataEntry.className = 'data-entry';
+            dataEntry.innerHTML = `
+                <div class="data-timestamp">${new Date().toLocaleTimeString()}</div>
+                <div class="data-stream-type">${streamType}</div>
+                <div class="data-content">${JSON.stringify(data, null, 2)}</div>
+            `;
+            
+            // Add to top
+            liveDataStream.insertBefore(dataEntry, liveDataStream.firstChild);
+            
+            // Keep only last 20 entries
+            const entries = liveDataStream.querySelectorAll('.data-entry');
+            if (entries.length > 20) {
+                for (let i = 20; i < entries.length; i++) {
+                    entries[i].remove();
+                }
+            }
+            
+            // Add to data points array
+            dataPoints.push({ streamType, data, timestamp: new Date() });
+        }
+
+        function updateStreamStatus(status) {
+            const statusDot = document.getElementById('streamStatus');
+            const statusText = document.getElementById('streamStatusText');
+            
+            if (status === 'connected') {
+                statusDot.className = 'status-dot connected';
+                statusText.textContent = 'Connected to real-time streams';
+            } else if (status === 'connecting') {
+                statusDot.className = 'status-dot connecting';
+                statusText.textContent = 'Connecting to streams...';
+            } else {
+                statusDot.className = 'status-dot disconnected';
+                statusText.textContent = 'Disconnected from streams';
+            }
+        }
+
+        function updateActiveSubscriptions() {
+            const subscriptionsList = document.getElementById('activeSubscriptionsList');
+            
+            if (activeStreams.size === 0) {
+                subscriptionsList.innerHTML = `
+                    <p style="opacity: 0.7; text-align: center; padding: 20px; font-size: 14px;">
+                        No active subscriptions<br>
+                        <span style="font-size: 12px;">Subscribe to a data stream to see real-time updates</span>
+                    </p>
+                `;
+            } else {
+                subscriptionsList.innerHTML = Array.from(activeStreams).map(stream => `
+                    <div class="subscription-item">
+                        <span class="subscription-icon">${stream === 'stocks' ? '📈' : stream === 'sensors' ? '🌡️' : '📋'}</span>
+                        <span class="subscription-name">${stream.charAt(0).toUpperCase() + stream.slice(1)}</span>
+                        <span class="subscription-status">Active</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateDataStats() {
+            const dataPointCount = document.getElementById('dataPointCount');
+            const dataRate = document.getElementById('dataRate');
+            
+            if (dataPointCount) {
+                dataPointCount.textContent = `${dataPointCounter} points`;
+            }
+            
+            if (dataRate) {
+                const elapsed = (Date.now() - streamStartTime) / 1000;
+                const rate = (dataPointCounter / elapsed).toFixed(1);
+                dataRate.textContent = `${rate}/sec`;
+            }
+        }
+
+        function pauseChart() {
+            const pauseBtn = document.getElementById('pauseBtn');
+            isPaused = !isPaused;
+            
+            if (isPaused) {
+                pauseBtn.innerHTML = '▶️ Resume';
+                pauseBtn.classList.add('paused');
+            } else {
+                pauseBtn.innerHTML = '⏸️ Pause';
+                pauseBtn.classList.remove('paused');
+            }
+        }
+
+        function clearChart() {
+            // Clear all chart data
+            chartData.datasets.forEach(dataset => {
+                dataset.data = [];
+            });
+            
+            if (chartInstance) {
+                chartInstance.update();
+            }
+            
+            // Clear live data stream
+            const liveDataStream = document.getElementById('liveDataStream');
+            if (liveDataStream) {
+                liveDataStream.innerHTML = `
+                    <div class="data-placeholder">
+                        <p style="opacity: 0.7; text-align: center; padding: 40px;">
+                            Data stream cleared
+                        </p>
+                    </div>
+                `;
+            }
+            
+            // Reset counters
+            dataPointCounter = 0;
+            dataPoints = [];
+            streamStartTime = Date.now();
+            updateDataStats();
+        }
+
+        function switchRealtimeTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.demo-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function addRealtimeProtocolMessage(action, streamType) {
+            const protocolLog = document.getElementById('realtimeProtocolLog');
+            if (!protocolLog) return;
+
+            const timestamp = new Date().toISOString();
+            const requestId = Math.floor(Math.random() * 1000);
+
+            let requestMessage, responseMessage;
+
+            if (action === 'subscribe') {
+                requestMessage = {
+                    jsonrpc: "2.0",
+                    id: requestId,
+                    method: "notifications/subscribe",
+                    params: {
+                        streamType: streamType,
+                        filters: {},
+                        bufferSize: 50
+                    }
+                };
+
+                responseMessage = {
+                    jsonrpc: "2.0",
+                    id: requestId,
+                    result: {
+                        subscriptionId: `sub_${streamType}_${requestId}`,
+                        status: "active",
+                        estimatedRate: streamType === 'stocks' ? 2 : streamType === 'sensors' ? 1 : 3
+                    }
+                };
+            } else {
+                requestMessage = {
+                    jsonrpc: "2.0",
+                    id: requestId,
+                    method: "notifications/unsubscribe",
+                    params: {
+                        streamType: streamType
+                    }
+                };
+
+                responseMessage = {
+                    jsonrpc: "2.0",
+                    id: requestId,
+                    result: {
+                        status: "unsubscribed",
+                        finalMessageCount: Math.floor(Math.random() * 100)
+                    }
+                };
+            }
+
+            // Add request message
+            const requestDiv = document.createElement('div');
+            requestDiv.className = 'protocol-message';
+            requestDiv.innerHTML = `
+                <div class="message-header">Request (${timestamp}):</div>
+                <pre class="message-content">${JSON.stringify(requestMessage, null, 2)}</pre>
+            `;
+
+            // Add response message
+            const responseDiv = document.createElement('div');
+            responseDiv.className = 'protocol-message response';
+            responseDiv.innerHTML = `
+                <div class="message-header">Response:</div>
+                <pre class="message-content">${JSON.stringify(responseMessage, null, 2)}</pre>
+            `;
+
+            // Insert at the top
+            protocolLog.insertBefore(responseDiv, protocolLog.firstChild);
+            protocolLog.insertBefore(requestDiv, protocolLog.firstChild);
+
+            // Limit to 8 messages (4 request/response pairs)
+            const messages = protocolLog.querySelectorAll('.protocol-message');
+            if (messages.length > 8) {
+                for (let i = 8; i < messages.length; i++) {
+                    messages[i].remove();
+                }
+            }
         }
 
         // **LOADING SCREEN**
@@ -5073,6 +6446,326 @@ ORDER BY total_orders DESC;">SELECT * FROM users LIMIT 5;</textarea>
             
             console.log('🚀 MCP Hub loaded successfully with all premium features!');
         });
+
+        // **UX ENHANCEMENT FUNCTIONS**
+        let currentDemoType = null;
+        let demoProgress = {
+            filesystem: false,
+            database: false,
+            api: false,
+            realtime: false
+        };
+
+        // Modal Dialog System
+        function showUxModal(type, title, message, primaryAction = null, secondaryAction = null) {
+            const modal = document.getElementById('uxModal');
+            const icon = document.getElementById('uxModalIcon');
+            const titleEl = document.getElementById('uxModalTitle');
+            const messageEl = document.getElementById('uxModalMessage');
+            const primaryBtn = document.getElementById('uxModalPrimary');
+            const secondaryBtn = document.getElementById('uxModalSecondary');
+
+            // Set icon based on type
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️',
+                question: '❓'
+            };
+            
+            icon.textContent = icons[type] || '✅';
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            // Configure buttons
+            primaryBtn.textContent = primaryAction?.text || 'OK';
+            primaryBtn.onclick = () => {
+                if (primaryAction?.callback) primaryAction.callback();
+                closeUxModal();
+            };
+
+            if (secondaryAction) {
+                secondaryBtn.style.display = 'inline-block';
+                secondaryBtn.textContent = secondaryAction.text;
+                secondaryBtn.onclick = () => {
+                    if (secondaryAction.callback) secondaryAction.callback();
+                    closeUxModal();
+                };
+            } else {
+                secondaryBtn.style.display = 'none';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeUxModal() {
+            const modal = document.getElementById('uxModal');
+            modal.classList.remove('active');
+        }
+
+        // Help System
+        function toggleHelp() {
+            const helpPanel = document.getElementById('helpPanel');
+            helpPanel.classList.toggle('active');
+        }
+
+        function updateHelpContent(demoType) {
+            const helpContent = document.getElementById('helpContent');
+            const helpTexts = {
+                filesystem: [
+                    'Click folders to expand and explore the file tree',
+                    'Select files to see their content in the preview',
+                    'Use action buttons to create/delete files (demo mode)',
+                    'Check the MCP Protocol tab to see real-time messages',
+                    'Each operation shows how MCP handles file system access'
+                ],
+                database: [
+                    'Explore the database schema by clicking table headers',
+                    'Use quick query buttons for common operations',
+                    'Write custom SQL queries in the editor',
+                    'Click "Run Query" to execute and see results',
+                    'Monitor MCP protocol messages for database operations'
+                ],
+                realtime: [
+                    'Subscribe to different data streams using the buttons',
+                    'Watch real-time data flow in the visualization tab',
+                    'Use pause/resume controls to manage data flow',
+                    'Switch between tabs to see live data and protocol messages',
+                    'Multiple streams can be active simultaneously'
+                ],
+                api: [
+                    'Build HTTP requests using the request builder',
+                    'Test different API endpoints and methods',
+                    'See authentication examples in action',
+                    'Generate cURL commands for your requests',
+                    'Watch MCP protocol handle API integrations'
+                ]
+            };
+
+            helpContent.innerHTML = (helpTexts[demoType] || helpTexts.filesystem)
+                .map(text => `<li>${text}</li>`)
+                .join('');
+        }
+
+        // Progress Tracking
+        function updateDemoProgress(demoType) {
+            currentDemoType = demoType;
+            
+            // Update progress dots
+            const progressDots = document.querySelectorAll('.progress-dot');
+            progressDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.dataset.demo === demoType || dot.dataset.demo === 'current') {
+                    dot.classList.add('active');
+                }
+                if (demoProgress[dot.dataset.demo]) {
+                    dot.classList.add('completed');
+                }
+            });
+
+            // Update completion badge
+            const completionBadge = document.getElementById('completionBadge');
+            const completionTexts = {
+                filesystem: 'Exploring Files',
+                database: 'Querying Data', 
+                api: 'Testing APIs',
+                realtime: 'Streaming Data'
+            };
+            completionBadge.textContent = completionTexts[demoType] || 'Getting Started';
+
+            // Update help content
+            updateHelpContent(demoType);
+        }
+
+        function markDemoCompleted(demoType) {
+            demoProgress[demoType] = true;
+            updateDemoProgress(demoType);
+            
+            // Show completion animation
+            const completionBadge = document.getElementById('completionBadge');
+            completionBadge.classList.add('success-animation');
+            setTimeout(() => {
+                completionBadge.classList.remove('success-animation');
+                completionBadge.textContent = 'Completed! ✨';
+            }, 600);
+        }
+
+        // Enhanced Alert Replacement Functions
+        function showSuccess(message, callback = null) {
+            showUxModal('success', 'Success!', message, 
+                callback ? { text: 'Continue', callback } : null
+            );
+        }
+
+        function showError(message, callback = null) {
+            showUxModal('error', 'Oops!', message,
+                callback ? { text: 'Try Again', callback } : null
+            );
+        }
+
+        function showConfirm(message, onConfirm, onCancel = null) {
+            showUxModal('question', 'Confirm Action', message,
+                { text: 'Confirm', callback: onConfirm },
+                { text: 'Cancel', callback: onCancel }
+            );
+        }
+
+        function showInfo(message, callback = null) {
+            showUxModal('info', 'Information', message,
+                callback ? { text: 'Got it', callback } : null
+            );
+        }
+
+        // Input Validation Helper
+        function validateInput(inputElement, validator, errorMessage) {
+            const isValid = validator(inputElement.value);
+            
+            if (isValid) {
+                inputElement.classList.remove('invalid');
+                const errorEl = inputElement.nextElementSibling;
+                if (errorEl && errorEl.classList.contains('input-error')) {
+                    errorEl.style.display = 'none';
+                }
+                return true;
+            } else {
+                inputElement.classList.add('invalid');
+                let errorEl = inputElement.nextElementSibling;
+                if (!errorEl || !errorEl.classList.contains('input-error')) {
+                    errorEl = document.createElement('div');
+                    errorEl.className = 'input-error';
+                    inputElement.parentNode.insertBefore(errorEl, inputElement.nextSibling);
+                }
+                errorEl.textContent = errorMessage;
+                errorEl.style.display = 'block';
+                return false;
+            }
+        }
+
+        // Loading State Helper
+        function showLoading(element, text = 'Loading...') {
+            const originalContent = element.innerHTML;
+            element.innerHTML = `<span class="loading-spinner"></span> ${text}`;
+            element.disabled = true;
+            return () => {
+                element.innerHTML = originalContent;
+                element.disabled = false;
+            };
+        }
+
+        // Tooltip Initialization
+        function initTooltips() {
+            // Add tooltips to various elements
+            const tooltipElements = [
+                { selector: '.demo-tab', tooltip: 'Switch between different views of the demo' },
+                { selector: '.protocol-message', tooltip: 'MCP protocol message - click to expand details' },
+                { selector: '.file-icon', tooltip: 'File type indicator' },
+                { selector: '.stream-icon', tooltip: 'Data stream type indicator' },
+                { selector: '.subscribe-btn', tooltip: 'Subscribe to receive real-time data from this stream' }
+            ];
+
+            tooltipElements.forEach(({ selector, tooltip }) => {
+                document.addEventListener('click', (e) => {
+                    const elements = document.querySelectorAll(selector);
+                    elements.forEach(el => {
+                        if (!el.hasAttribute('data-tooltip')) {
+                            el.classList.add('tooltip');
+                            el.setAttribute('data-tooltip', tooltip);
+                        }
+                    });
+                });
+            });
+        }
+
+        // Enhanced Demo Functions with UX improvements
+        function createFileWithValidation() {
+            const modal = document.createElement('div');
+            modal.className = 'ux-modal active';
+            modal.innerHTML = `
+                <div class="ux-modal-content">
+                    <div class="ux-modal-icon">📄</div>
+                    <h3 class="ux-modal-title">Create New File</h3>
+                    <div class="input-container">
+                        <input type="text" class="input-field" id="newFileName" placeholder="Enter file name (e.g., example.txt)">
+                        <div class="input-error">Please enter a valid file name</div>
+                    </div>
+                    <div class="ux-modal-actions">
+                        <button class="ux-modal-btn primary" onclick="handleFileCreation()">Create File</button>
+                        <button class="ux-modal-btn secondary" onclick="closeCreateFileModal()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function handleFileCreation() {
+            const input = document.getElementById('newFileName');
+            const isValid = validateInput(input, 
+                (value) => value.trim().length > 0 && /^[a-zA-Z0-9._-]+$/.test(value),
+                'File name can only contain letters, numbers, dots, hyphens and underscores'
+            );
+
+            if (isValid) {
+                const fileName = input.value.trim();
+                showSuccess(`File "${fileName}" created successfully! 
+                
+In a real implementation, this would:
+• Create the actual file in the filesystem
+• Update the MCP resource list
+• Notify connected AI clients
+• Log the operation for audit
+
+This is a demo showing the UX flow.`, () => {
+                    addProtocolMessage('file-create', `/documents/${fileName}`);
+                    markDemoCompleted('filesystem');
+                });
+                closeCreateFileModal();
+            }
+        }
+
+        function closeCreateFileModal() {
+            const modal = document.querySelector('.ux-modal.active');
+            if (modal && modal.innerHTML.includes('Create New File')) {
+                modal.remove();
+            }
+        }
+
+        function deleteFileWithConfirmation() {
+            if (!selectedFile) {
+                showError('Please select a file first by clicking on it in the file tree.');
+                return;
+            }
+
+            showConfirm(
+                `Are you sure you want to delete "${selectedFile}"?
+                
+This action cannot be undone. In a real implementation, this would permanently remove the file from your filesystem.`,
+                () => {
+                    showSuccess(`File "${selectedFile}" deleted successfully!
+                    
+In a real implementation, this would:
+• Remove the file from the filesystem  
+• Update the MCP resource list
+• Notify connected AI clients
+• Log the deletion for audit trails
+
+This is a demo showing the UX flow.`, () => {
+                        addProtocolMessage('file-delete', selectedFile);
+                        markDemoCompleted('filesystem');
+                    });
+                }
+            );
+        }
+
+        // Override existing functions with enhanced UX
+        window.createFile = createFileWithValidation;
+        window.deleteSelected = deleteFileWithConfirmation;
+
+        function createFolder() {
+            showInfo('Folder creation feature coming soon! This would work similarly to file creation but for directories.',
+                () => markDemoCompleted('filesystem')
+            );
+        }
     </script>
 </body>
 </html>
