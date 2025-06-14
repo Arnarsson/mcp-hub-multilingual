@@ -1,0 +1,39 @@
+name: Tutorial Automation Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get -y install ffmpeg
+
+      - name: Run automation pipeline
+        run: npm run pipeline
+
+      - name: Upload tutorial assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: tutorial-assets
+          path: |
+            public/videos/filesystem-story-demo.mp4
+            public/gifs/filesystem-story-demo.gif 

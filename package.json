@@ -1,0 +1,22 @@
+{
+  "name": "mcp-hub-multilingual",
+  "version": "1.0.0",
+  "main": "src/test-demo-modals.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "npx serve public -p 4000",
+    "tutorials": "playwright test tests/tutorials.spec.js --project=chromium --reporter=line",
+    "generate:gifs": "node scripts/video-to-gif.js public/videos/filesystem-story-demo.mp4 public/gifs/filesystem-story-demo.gif 8",
+    "pipeline": "npm run tutorials && node scripts/merge-video-audio.js public/videos/tutorials-Tutorial-recordings-Filesystem-chromium/video.webm demos/audio.mp3 public/videos/filesystem-story-demo.mp4 && npm run generate:gifs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "playwright": "^1.53.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.43.0"
+  }
+}

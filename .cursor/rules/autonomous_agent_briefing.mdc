@@ -1,0 +1,17 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# 🚀 Autonomous Agent Briefing Reference
+
+The full autonomous execution workflow, task queue, and quality gates are documented in [AUTONOMOUS_AGENT_BRIEFING.md](mdc:AUTONOMOUS_AGENT_BRIEFING.md).
+
+Use this briefing to:
+
+- Understand the current task queue (Tasks 1–5) and the auto-proceed rules.
+- Review specific deliverables and quality thresholds for each task (see headings like **"TASK 2 SPECIFIC INSTRUCTIONS"**).
+- Check the `QUALITY_GATES` JavaScript object for required video/audio/file standards.
+- Follow the **AUTO-PROCEED WORKFLOW** and **ESCALATION PROTOCOL** sections before advancing tasks.
+
+Always consult this file before starting, continuing, or closing any autonomous task to ensure compliance with project rules.
