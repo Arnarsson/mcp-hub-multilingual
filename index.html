@@ -22,6 +22,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Chart.js CDN for Real-time Demo -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    
     <!-- Loading Screen -->
     <style>
         #loading-screen {
@@ -1767,162 +1771,69 @@
         }
         
         /* Mobile Menu */
-        .mobile-menu-toggle {
-            display: none;
-            width: 44px;
-            height: 44px;
-            align-items: center;
-            justify-content: center;
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: var(--radius-lg);
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-        
-        .mobile-menu {
-            position: fixed;
-            top: 72px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--white);
-            transform: translateX(100%);
-            transition: transform var(--transition);
-            z-index: 999;
-            overflow-y: auto;
-        }
-        
-        .mobile-menu.show {
-            transform: translateX(0);
-        }
-        
-        .mobile-nav-links {
-            list-style: none;
-            padding: 20px;
-        }
-        
-        .mobile-nav-links li {
-            margin-bottom: 8px;
-        }
-        
-        .mobile-nav-links a {
-            display: block;
-            padding: 12px 20px;
-            color: var(--gray-700);
-            text-decoration: none;
-            font-weight: 500;
-            border-radius: var(--radius-lg);
-            transition: all var(--transition);
-        }
-        
-        .mobile-nav-links a:hover {
-            background: var(--gray-50);
-            color: var(--primary);
-        }
-        
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .footer-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu-toggle {
-                display: flex;
-            }
-            
-            .hero {
-                padding: 120px 0 60px;
-            }
-            
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .hero-subtitle {
-                font-size: 18px;
-            }
-            
-            .hero-cta {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+                box-shadow: var(--shadow-xl);
                 flex-direction: column;
-                align-items: center;
+                gap: 0;
+                transform: translateY(-100%);
+                transition: transform var(--transition);
+                z-index: 999;
             }
             
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .nav-menu.active {
+                transform: translateY(0);
             }
             
-            .features-grid,
-            .guides-grid {
-                grid-template-columns: 1fr;
+            .nav-item {
+                width: 100%;
+                padding: 16px 24px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
             
-            .newsletter-form {
-                flex-direction: column;
+            .nav-item:last-child {
+                border-bottom: none;
             }
             
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
+            .mobile-menu-btn {
+                display: block;
             }
             
-            .language-button span:not(.language-flag) {
-                display: none;
+            [data-theme="dark"] .nav-menu {
+                background: rgba(15, 23, 42, 0.98);
+                border: 1px solid rgba(255, 255, 255, 0.1);
             }
         }
-        
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Selection */
-        ::selection {
-            background: var(--primary);
-            color: white;
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: var(--gray-100);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--gray-400);
-            border-radius: var(--radius);
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gray-500);
-        }
-        /* Interactive Demos */
+
+        /* Demo Section Styling */
         .demo-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 120px 0;
-            color: white;
+            position: relative;
+            overflow: hidden;
         }
         
         .demo-container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 24px;
+            position: relative;
+            z-index: 2;
         }
         
         .demo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-top: 60px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
         }
         
         .demo-card {
@@ -1932,373 +1843,536 @@
             border-radius: var(--radius-xl);
             padding: 32px;
             text-align: center;
-            transition: all var(--transition);
             cursor: pointer;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
         }
         
         .demo-card:hover {
+            background: rgba(255, 255, 255, 0.15);
             transform: translateY(-8px);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-2xl);
         }
         
         .demo-icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius-full);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            font-size: 32px;
+            font-size: 48px;
+            margin-bottom: 24px;
+            display: block;
         }
         
         .demo-title {
             font-size: 24px;
             font-weight: 700;
+            color: white;
             margin-bottom: 16px;
         }
         
         .demo-description {
-            opacity: 0.9;
+            color: rgba(255, 255, 255, 0.8);
             line-height: 1.6;
         }
-        
-        /* Live Code Playground */
-        .playground-section {
-            background: var(--dark);
-            padding: 120px 0;
-            color: white;
+
+        /* **REAL-TIME DEMO MODAL STYLES** */
+        .demo-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition);
+            padding: 20px;
         }
-        
-        .playground-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
+
+        .demo-modal.active {
+            opacity: 1;
+            visibility: visible;
         }
-        
-        .playground-wrapper {
-            background: var(--gray-900);
+
+        .demo-modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: var(--radius-xl);
-            overflow: hidden;
+            width: 100%;
+            max-width: 1400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
             box-shadow: var(--shadow-2xl);
-            margin-top: 60px;
         }
-        
-        .playground-header {
-            background: var(--gray-800);
-            padding: 16px 24px;
+
+        [data-theme="dark"] .demo-modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .demo-modal-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid var(--gray-700);
         }
-        
-        .playground-title {
-            font-weight: 600;
-            color: var(--gray-300);
+
+        [data-theme="dark"] .demo-modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .playground-controls {
-            display: flex;
-            gap: 12px;
+
+        .demo-modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 0;
         }
-        
-        .playground-btn {
-            background: var(--primary);
-            color: white;
+
+        .demo-modal-close {
+            width: 40px;
+            height: 40px;
             border: none;
-            padding: 8px 16px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: 500;
-            transition: all var(--transition-fast);
-        }
-        
-        .playground-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-        
-        .playground-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 500px;
-        }
-        
-        .playground-editor {
-            background: var(--gray-900);
-            padding: 24px;
-            border-right: 1px solid var(--gray-700);
-        }
-        
-        .playground-output {
-            background: var(--gray-800);
-            padding: 24px;
-        }
-        
-        .code-editor {
-            width: 100%;
-            height: 400px;
-            background: transparent;
-            border: none;
-            color: var(--gray-300);
-            font-family: var(--font-mono);
-            font-size: 14px;
-            line-height: 1.6;
-            resize: none;
-            outline: none;
-        }
-        
-        /* Video Tutorials */
-        .tutorials-section {
-            background: var(--gray-50);
-            padding: 120px 0;
-        }
-        
-        .tutorials-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        
-        .tutorials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            margin-top: 60px;
-        }
-        
-        .tutorial-card {
-            background: white;
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            transition: all var(--transition);
-        }
-        
-        .tutorial-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
-        }
-        
-        .tutorial-thumbnail {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        
-        .play-btn {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             border-radius: var(--radius-full);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
-            font-size: 24px;
+            cursor: pointer;
             transition: all var(--transition);
+            font-size: 20px;
+            color: var(--gray-600);
         }
-        
-        .play-btn:hover {
-            background: white;
+
+        .demo-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
             transform: scale(1.1);
         }
-        
-        .tutorial-content {
-            padding: 24px;
+
+        .demo-modal-body {
+            padding: 32px;
         }
-        
-        .tutorial-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 12px;
+
+        /* Real-time Demo Layout */
+        .realtime-demo {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 24px;
+            min-height: 600px;
         }
-        
-        .tutorial-description {
-            color: var(--gray-600);
-            line-height: 1.6;
+
+        .realtime-main {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .realtime-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Connection Status */
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all var(--transition);
             margin-bottom: 16px;
         }
-        
-        .tutorial-meta {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 14px;
-            color: var(--gray-500);
-        }
-        
-        /* Testimonials */
-        .testimonials-section {
-            background: white;
-            padding: 120px 0;
-        }
-        
-        .testimonials-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        
-        .testimonials-carousel {
-            position: relative;
-            margin-top: 60px;
-        }
-        
-        .testimonial-item {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-            opacity: 0;
-            transform: translateX(100px);
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
             transition: all var(--transition);
         }
-        
-        .testimonial-item.active {
-            opacity: 1;
-            transform: translateX(0);
+
+        .connection-status.disconnected {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
-        
-        .testimonial-quote {
-            font-size: 24px;
-            line-height: 1.6;
-            color: var(--gray-800);
-            margin-bottom: 32px;
-            font-style: italic;
+
+        .connection-status.disconnected .status-indicator {
+            background: var(--error);
         }
-        
-        .testimonial-author {
+
+        .connection-status.connecting {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .connection-status.connecting .status-indicator {
+            background: var(--warning);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .connection-status.connected {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .connection-status.connected .status-indicator {
+            background: var(--success);
+            animation: pulse-success 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes pulse-success {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            position: relative;
+            min-height: 400px;
+        }
+
+        [data-theme="dark"] .chart-container {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chart-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .author-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--radius-full);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
+
+        .chart-title {
             font-size: 20px;
-        }
-        
-        .author-info h4 {
             font-weight: 600;
             color: var(--gray-900);
-            margin-bottom: 4px;
+            margin: 0;
         }
-        
-        .author-info p {
+
+        .chart-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .time-range-picker {
+            display: flex;
+            gap: 4px;
+        }
+
+        .time-btn {
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
             color: var(--gray-600);
+            border-radius: var(--radius);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .time-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .time-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Stream Browser */
+        .stream-browser {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 20px;
+        }
+
+        .browser-header {
+            margin-bottom: 16px;
+        }
+
+        .browser-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0 0 12px 0;
+        }
+
+        .stream-search {
+            margin-bottom: 16px;
+        }
+
+        .stream-search input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius);
+            color: var(--gray-700);
             font-size: 14px;
         }
-        
-        .carousel-controls {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 32px;
+
+        .stream-search input::placeholder {
+            color: var(--gray-500);
         }
-        
-        .carousel-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: var(--radius-full);
-            background: var(--gray-300);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-        
-        .carousel-dot.active {
-            background: var(--primary);
-            transform: scale(1.2);
-        }
-        
-        /* Pricing Calculator */
-        .pricing-section {
-            background: linear-gradient(135deg, var(--gray-900) 0%, var(--dark) 100%);
-            padding: 120px 0;
-            color: white;
-        }
-        
-        .pricing-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        
-        .pricing-calculator {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-xl);
-            padding: 40px;
-            margin-top: 60px;
-        }
-        
-        .calculator-controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 32px;
-            margin-bottom: 40px;
-        }
-        
-        .control-group {
+
+        .stream-grid {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-        
-        .control-label {
-            font-weight: 600;
-            color: var(--gray-300);
-        }
-        
-        .control-input {
+
+        .stream-card {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: var(--radius);
-            padding: 12px 16px;
-            color: white;
-            font-size: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all var(--transition);
         }
-        
-        .control-input:focus {
-            border-color: var(--primary);
+
+        .stream-card:hover {
             background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
-        
-        .pricing-result {
-            text-align: center;
-            padding: 32px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-lg);
+
+        .stream-card.subscribed {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
         }
-        
-        .price-display {
-            font-size: 48px;
-            font-weight: 900;
-            color: var(--primary-light);
+
+        .stream-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .stream-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .stream-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .stream-description {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin: 0 0 12px 0;
+        }
+
+        .stream-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stream-meta {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+
+        .subscribe-btn {
+            padding: 4px 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .subscribe-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .subscribe-btn.subscribed {
+            background: var(--success);
+        }
+
+        /* MCP Protocol Panel */
+        .mcp-protocol-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .protocol-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 16px;
         }
-        
-        .price-details {
-            color: var(--gray-400);
-            line-height: 1.6;
+
+        .protocol-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .clear-logs-btn {
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--gray-600);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .clear-logs-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .protocol-messages {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .protocol-message {
+            margin-bottom: 12px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius);
+            border-left: 3px solid var(--primary);
+        }
+
+        .message-timestamp {
+            color: var(--gray-500);
+            font-size: 10px;
+            margin-bottom: 4px;
+        }
+
+        .message-content {
+            color: var(--gray-300);
+        }
+
+        .message-request {
+            border-left-color: var(--info);
+        }
+
+        .message-response {
+            border-left-color: var(--success);
+        }
+
+        .message-error {
+            border-left-color: var(--error);
+        }
+
+        /* Loading States */
+        .chart-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: var(--gray-500);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(99, 102, 241, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .realtime-demo {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .realtime-sidebar {
+                order: -1;
+            }
+            
+            .stream-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .demo-modal-content {
+                margin: 10px;
+                max-height: calc(100vh - 20px);
+            }
+            
+            .demo-modal-header {
+                padding: 16px 20px;
+            }
+            
+            .demo-modal-body {
+                padding: 20px;
+            }
+            
+            .chart-container {
+                padding: 16px;
+            }
+            
+            .time-range-picker {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -2680,6 +2754,81 @@ await server.connect(transport);</code></pre>
             </div>
         </div>
     </footer>
+
+    <!-- Real-time Data Demo Modal -->
+    <div class="demo-modal" id="realtime-demo-modal">
+        <div class="demo-modal-content">
+            <div class="demo-modal-header">
+                <h2 class="demo-modal-title">Real-time Data Streaming Demo</h2>
+                <button class="demo-modal-close" onclick="closeRealtimeDemo()" aria-label="Close demo">×</button>
+            </div>
+            <div class="demo-modal-body">
+                <div class="realtime-demo">
+                    <!-- Main Chart Area -->
+                    <div class="realtime-main">
+                        <!-- Connection Status -->
+                        <div class="connection-status disconnected" id="connection-status">
+                            <div class="status-indicator"></div>
+                            <span>Disconnected</span>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <div>
+                                    <h3 class="chart-title" id="chart-title">Select a data stream to begin</h3>
+                                    <p class="chart-subtitle" id="chart-subtitle">Real-time MCP protocol streaming</p>
+                                </div>
+                                <div class="chart-controls">
+                                    <div class="time-range-picker">
+                                        <button class="time-btn active" data-range="1m">1M</button>
+                                        <button class="time-btn" data-range="5m">5M</button>
+                                        <button class="time-btn" data-range="15m">15M</button>
+                                        <button class="time-btn" data-range="1h">1H</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-content" id="chart-content">
+                                <div class="chart-loading">
+                                    <div class="loading-text">Select a data stream from the sidebar to start monitoring real-time data</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    <div class="realtime-sidebar">
+                        <!-- Stream Browser -->
+                        <div class="stream-browser">
+                            <div class="browser-header">
+                                <h4 class="browser-title">Available Data Streams</h4>
+                                <div class="stream-search">
+                                    <input type="search" placeholder="Search streams..." id="stream-search">
+                                </div>
+                            </div>
+                            <div class="stream-grid" id="stream-grid">
+                                <!-- Stream cards will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <!-- MCP Protocol Panel -->
+                        <div class="mcp-protocol-panel">
+                            <div class="protocol-header">
+                                <h4 class="protocol-title">MCP Protocol Messages</h4>
+                                <button class="clear-logs-btn" onclick="clearProtocolLogs()">Clear</button>
+                            </div>
+                            <div class="protocol-messages" id="protocol-messages">
+                                <div class="protocol-message">
+                                    <div class="message-timestamp">Ready to connect...</div>
+                                    <div class="message-content">Click a stream to see MCP protocol messages</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // **SAFE STORAGE WRAPPER** - Fixes localStorage security errors
@@ -3457,14 +3606,18 @@ console.log('Reading demo.txt:', readResource('file://demo.txt'));`;
             calculatePrice();
         }
 
-        // **DEMO INTERACTIONS**
+        // **DEMO INTERACTIONS - REAL-TIME DATA STREAMING**
         function initDemoInteractions() {
             const demoCards = document.querySelectorAll('.demo-card');
             
             demoCards.forEach(card => {
                 card.addEventListener('click', () => {
                     const demoType = card.getAttribute('data-demo');
-                    alert(`Demo: ${demoType} - Feature kommer snart!`);
+                    if (demoType === 'realtime') {
+                        openRealtimeDemo();
+                    } else {
+                        alert(`Demo: ${demoType} - Feature kommer snart!`);
+                    }
                 });
             });
             
@@ -3476,6 +3629,585 @@ console.log('Reading demo.txt:', readResource('file://demo.txt'));`;
                 });
             });
         }
+
+        // **REAL-TIME DATA DEMO IMPLEMENTATION**
+        
+        // WebSocket Simulator Class
+        class WebSocketSimulator {
+            constructor() {
+                this.state = 'disconnected';
+                this.streams = new Map();
+                this.subscriptions = new Map();
+                this.connectionHealth = { ping: 0, messageRate: 0, throughput: 0 };
+                this.messageId = 1;
+            }
+            
+            connect(endpoint) {
+                return new Promise((resolve, reject) => {
+                    this.state = 'connecting';
+                    updateConnectionStatus('connecting');
+                    logMCPMessage('request', {
+                        jsonrpc: '2.0',
+                        method: 'connection/establish',
+                        params: { endpoint },
+                        id: this.messageId++
+                    });
+                    
+                    // Simulate connection delay
+                    setTimeout(() => {
+                        if (Math.random() > 0.1) { // 90% success rate
+                            this.state = 'connected';
+                            updateConnectionStatus('connected');
+                            logMCPMessage('response', {
+                                jsonrpc: '2.0',
+                                result: { status: 'connected', sessionId: 'sess_' + Date.now() },
+                                id: this.messageId - 1
+                            });
+                            resolve();
+                        } else {
+                            this.state = 'error';
+                            updateConnectionStatus('disconnected');
+                            logMCPMessage('error', {
+                                jsonrpc: '2.0',
+                                error: { code: -1, message: 'Connection timeout' },
+                                id: this.messageId - 1
+                            });
+                            reject(new Error('Connection failed'));
+                        }
+                    }, 1500);
+                });
+            }
+            
+            subscribe(streamId, callback) {
+                logMCPMessage('request', {
+                    jsonrpc: '2.0',
+                    method: 'streams/subscribe',
+                    params: { 
+                        streamId,
+                        options: { interval: '1s', format: 'json' }
+                    },
+                    id: this.messageId++
+                });
+                
+                setTimeout(() => {
+                    logMCPMessage('response', {
+                        jsonrpc: '2.0',
+                        result: { subscribed: true, streamId },
+                        id: this.messageId - 1
+                    });
+                    
+                    this.subscriptions.set(streamId, callback);
+                    this.startDataStream(streamId);
+                }, 500);
+            }
+            
+            unsubscribe(streamId) {
+                logMCPMessage('request', {
+                    jsonrpc: '2.0',
+                    method: 'streams/unsubscribe',
+                    params: { streamId },
+                    id: this.messageId++
+                });
+                
+                if (this.streams.has(streamId)) {
+                    clearInterval(this.streams.get(streamId));
+                    this.streams.delete(streamId);
+                }
+                this.subscriptions.delete(streamId);
+                
+                setTimeout(() => {
+                    logMCPMessage('response', {
+                        jsonrpc: '2.0',
+                        result: { unsubscribed: true, streamId },
+                        id: this.messageId - 1
+                    });
+                }, 200);
+            }
+            
+            startDataStream(streamId) {
+                const interval = setInterval(() => {
+                    if (this.state !== 'connected') {
+                        clearInterval(interval);
+                        return;
+                    }
+                    
+                    const data = this.generateMockData(streamId);
+                    const callback = this.subscriptions.get(streamId);
+                    if (callback) {
+                        callback(data);
+                    }
+                    
+                    // Log data message
+                    logMCPMessage('data', {
+                        jsonrpc: '2.0',
+                        method: 'streams/data',
+                        params: {
+                            streamId,
+                            timestamp: new Date().toISOString(),
+                            data
+                        }
+                    });
+                }, 1000);
+                
+                this.streams.set(streamId, interval);
+            }
+            
+            generateMockData(streamType) {
+                const timestamp = new Date();
+                
+                switch (streamType) {
+                    case 'stock_aapl':
+                        return {
+                            symbol: 'AAPL',
+                            price: 150 + (Math.random() - 0.5) * 10,
+                            volume: Math.floor(Math.random() * 1000000),
+                            change: (Math.random() - 0.5) * 5,
+                            timestamp
+                        };
+                    
+                    case 'stock_googl':
+                        return {
+                            symbol: 'GOOGL',
+                            price: 2800 + (Math.random() - 0.5) * 100,
+                            volume: Math.floor(Math.random() * 500000),
+                            change: (Math.random() - 0.5) * 50,
+                            timestamp
+                        };
+                    
+                    case 'iot_temperature':
+                        return {
+                            sensorId: 'temp_001',
+                            location: 'Office Building Floor 3',
+                            temperature: 20 + Math.sin(Date.now() / 10000) * 5 + (Math.random() - 0.5) * 2,
+                            humidity: 45 + Math.sin(Date.now() / 15000) * 10 + (Math.random() - 0.5) * 5,
+                            timestamp
+                        };
+                    
+                    case 'system_cpu':
+                        return {
+                            metric: 'cpu_usage',
+                            value: Math.max(0, Math.min(100, 30 + Math.sin(Date.now() / 5000) * 20 + (Math.random() - 0.5) * 15)),
+                            host: 'server-01',
+                            timestamp
+                        };
+                    
+                    case 'analytics_users':
+                        return {
+                            metric: 'active_users',
+                            value: Math.floor(Math.random() * 1000) + 500,
+                            page_views: Math.floor(Math.random() * 5000) + 2000,
+                            timestamp
+                        };
+                    
+                    default:
+                        return { value: Math.random() * 100, timestamp };
+                }
+            }
+        }
+
+        // Global WebSocket simulator instance
+        let wsSimulator = new WebSocketSimulator();
+        let currentChart = null;
+        let currentStreamId = null;
+        let chartData = [];
+
+        // Stream definitions
+        const availableStreams = [
+            {
+                id: 'stock_aapl',
+                name: 'Apple Inc. (AAPL)',
+                description: 'Real-time stock price and volume',
+                category: 'financial',
+                icon: '📊',
+                dataRate: '~2KB/min',
+                status: 'active'
+            },
+            {
+                id: 'stock_googl',
+                name: 'Alphabet Inc. (GOOGL)',
+                description: 'Real-time stock price and volume',
+                category: 'financial',
+                icon: '📈',
+                dataRate: '~2KB/min',
+                status: 'active'
+            },
+            {
+                id: 'iot_temperature',
+                name: 'IoT Temperature Sensors',
+                description: 'Temperature and humidity monitoring',
+                category: 'iot',
+                icon: '🌡️',
+                dataRate: '~1KB/min',
+                status: 'active'
+            },
+            {
+                id: 'system_cpu',
+                name: 'System CPU Monitoring',
+                description: 'Real-time CPU usage metrics',
+                category: 'system',
+                icon: '💻',
+                dataRate: '~1KB/min',
+                status: 'active'
+            },
+            {
+                id: 'analytics_users',
+                name: 'Website Analytics',
+                description: 'Live user activity and page views',
+                category: 'analytics',
+                icon: '👥',
+                dataRate: '~3KB/min',
+                status: 'active'
+            }
+        ];
+
+        // Demo functions
+        function openRealtimeDemo() {
+            const modal = document.getElementById('realtime-demo-modal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Initialize demo
+            initStreamBrowser();
+            initTimeRangePicker();
+            
+            // Auto-connect after a short delay
+            setTimeout(() => {
+                wsSimulator.connect('wss://api.mcphub.com/realtime')
+                    .then(() => {
+                        console.log('✅ WebSocket simulator connected');
+                    })
+                    .catch(err => {
+                        console.error('❌ Connection failed:', err);
+                    });
+            }, 1000);
+        }
+
+        function closeRealtimeDemo() {
+            const modal = document.getElementById('realtime-demo-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Cleanup
+            if (currentChart) {
+                currentChart.destroy();
+                currentChart = null;
+            }
+            
+            // Unsubscribe from all streams
+            wsSimulator.subscriptions.forEach((_, streamId) => {
+                wsSimulator.unsubscribe(streamId);
+            });
+            
+            wsSimulator.state = 'disconnected';
+            updateConnectionStatus('disconnected');
+            currentStreamId = null;
+            chartData = [];
+        }
+
+        function initStreamBrowser() {
+            const streamGrid = document.getElementById('stream-grid');
+            const searchInput = document.getElementById('stream-search');
+            
+            function renderStreams(streams = availableStreams) {
+                streamGrid.innerHTML = streams.map(stream => `
+                    <div class="stream-card ${wsSimulator.subscriptions.has(stream.id) ? 'subscribed' : ''}" 
+                         data-stream="${stream.id}">
+                        <div class="stream-card-header">
+                            <h5 class="stream-name">${stream.icon} ${stream.name}</h5>
+                            <div class="stream-status"></div>
+                        </div>
+                        <p class="stream-description">${stream.description}</p>
+                        <div class="stream-controls">
+                            <div class="stream-meta">
+                                <div>${stream.dataRate}</div>
+                                <div>${stream.category}</div>
+                            </div>
+                            <button class="subscribe-btn ${wsSimulator.subscriptions.has(stream.id) ? 'subscribed' : ''}" 
+                                    onclick="toggleStreamSubscription('${stream.id}')">
+                                ${wsSimulator.subscriptions.has(stream.id) ? 'Unsubscribe' : 'Subscribe'}
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Search functionality
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = availableStreams.filter(stream => 
+                    stream.name.toLowerCase().includes(query) ||
+                    stream.description.toLowerCase().includes(query) ||
+                    stream.category.toLowerCase().includes(query)
+                );
+                renderStreams(filtered);
+            });
+            
+            renderStreams();
+        }
+
+        function toggleStreamSubscription(streamId) {
+            if (wsSimulator.state !== 'connected') {
+                alert('Please wait for connection to establish');
+                return;
+            }
+            
+            if (wsSimulator.subscriptions.has(streamId)) {
+                wsSimulator.unsubscribe(streamId);
+            } else {
+                // Subscribe to stream
+                wsSimulator.subscribe(streamId, (data) => {
+                    handleStreamData(streamId, data);
+                });
+                
+                // If this is the first subscription, set up the chart
+                if (!currentChart) {
+                    setupChart(streamId);
+                }
+            }
+            
+            // Refresh stream browser
+            initStreamBrowser();
+        }
+
+        function setupChart(streamId) {
+            const stream = availableStreams.find(s => s.id === streamId);
+            if (!stream) return;
+            
+            currentStreamId = streamId;
+            chartData = [];
+            
+            // Update chart title
+            document.getElementById('chart-title').textContent = stream.name;
+            document.getElementById('chart-subtitle').textContent = `Live data from ${stream.category} source`;
+            
+            // Create chart canvas
+            const chartContent = document.getElementById('chart-content');
+            chartContent.innerHTML = '<canvas id="realtime-chart" width="800" height="400"></canvas>';
+            
+            const ctx = document.getElementById('realtime-chart').getContext('2d');
+            
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: getDatasetLabel(streamId),
+                        data: [],
+                        borderColor: 'rgb(99, 102, 241)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        tension: 0.4,
+                        fill: false,
+                        pointRadius: 2,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 0 // Disable animation for real-time
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgb(99, 102, 241)',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                displayFormats: {
+                                    second: 'HH:mm:ss'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: getYAxisLabel(streamId)
+                            },
+                            beginAtZero: streamId.includes('system') || streamId.includes('analytics')
+                        }
+                    }
+                }
+            });
+        }
+
+        function getDatasetLabel(streamId) {
+            switch (streamId) {
+                case 'stock_aapl': return 'AAPL Stock Price ($)';
+                case 'stock_googl': return 'GOOGL Stock Price ($)';
+                case 'iot_temperature': return 'Temperature (°C)';
+                case 'system_cpu': return 'CPU Usage (%)';
+                case 'analytics_users': return 'Active Users';
+                default: return 'Value';
+            }
+        }
+
+        function getYAxisLabel(streamId) {
+            switch (streamId) {
+                case 'stock_aapl':
+                case 'stock_googl': return 'Price ($)';
+                case 'iot_temperature': return 'Temperature (°C)';
+                case 'system_cpu': return 'Usage (%)';
+                case 'analytics_users': return 'Users';
+                default: return 'Value';
+            }
+        }
+
+        function handleStreamData(streamId, data) {
+            if (streamId !== currentStreamId || !currentChart) return;
+            
+            // Add data point
+            const value = extractDataValue(streamId, data);
+            const time = new Date(data.timestamp);
+            
+            chartData.push({ x: time, y: value });
+            
+            // Keep only last 60 data points (1 minute of data)
+            if (chartData.length > 60) {
+                chartData.shift();
+            }
+            
+            // Update chart
+            currentChart.data.labels = chartData.map(d => d.x);
+            currentChart.data.datasets[0].data = chartData;
+            currentChart.update('none'); // No animation for real-time updates
+        }
+
+        function extractDataValue(streamId, data) {
+            switch (streamId) {
+                case 'stock_aapl':
+                case 'stock_googl': return data.price;
+                case 'iot_temperature': return data.temperature;
+                case 'system_cpu': return data.value;
+                case 'analytics_users': return data.value;
+                default: return data.value || 0;
+            }
+        }
+
+        function initTimeRangePicker() {
+            const timeButtons = document.querySelectorAll('.time-btn');
+            
+            timeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    timeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const range = btn.getAttribute('data-range');
+                    updateChartTimeRange(range);
+                });
+            });
+        }
+
+        function updateChartTimeRange(range) {
+            if (!currentChart) return;
+            
+            const maxPoints = {
+                '1m': 60,
+                '5m': 300,
+                '15m': 900,
+                '1h': 3600
+            };
+            
+            const limit = maxPoints[range] || 60;
+            
+            // Adjust data points
+            if (chartData.length > limit) {
+                chartData = chartData.slice(-limit);
+                currentChart.data.labels = chartData.map(d => d.x);
+                currentChart.data.datasets[0].data = chartData;
+                currentChart.update();
+            }
+        }
+
+        function updateConnectionStatus(status) {
+            const statusElement = document.getElementById('connection-status');
+            const statusText = statusElement.querySelector('span');
+            
+            statusElement.className = `connection-status ${status}`;
+            
+            switch (status) {
+                case 'disconnected':
+                    statusText.textContent = 'Disconnected';
+                    break;
+                case 'connecting':
+                    statusText.textContent = 'Connecting...';
+                    break;
+                case 'connected':
+                    statusText.textContent = 'Connected';
+                    break;
+                case 'error':
+                    statusText.textContent = 'Connection Error';
+                    break;
+            }
+        }
+
+        function logMCPMessage(type, message) {
+            const protocolMessages = document.getElementById('protocol-messages');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `protocol-message message-${type}`;
+            
+            messageDiv.innerHTML = `
+                <div class="message-timestamp">${timestamp}</div>
+                <div class="message-content">${JSON.stringify(message, null, 2)}</div>
+            `;
+            
+            protocolMessages.appendChild(messageDiv);
+            protocolMessages.scrollTop = protocolMessages.scrollHeight;
+            
+            // Keep only last 20 messages
+            const messages = protocolMessages.querySelectorAll('.protocol-message');
+            if (messages.length > 20) {
+                messages[0].remove();
+            }
+        }
+
+        function clearProtocolLogs() {
+            const protocolMessages = document.getElementById('protocol-messages');
+            protocolMessages.innerHTML = `
+                <div class="protocol-message">
+                    <div class="message-timestamp">Logs cleared</div>
+                    <div class="message-content">Protocol message history cleared</div>
+                </div>
+            `;
+        }
+
+        // Modal click outside to close
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('realtime-demo-modal');
+            if (e.target === modal) {
+                closeRealtimeDemo();
+            }
+        });
+
+        // Escape key to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('realtime-demo-modal');
+                if (modal.classList.contains('active')) {
+                    closeRealtimeDemo();
+                }
+            }
+        });
 
         // **LOADING SCREEN**
         function hideLoadingScreen() {
