@@ -1559,6 +1559,22 @@
             50% { transform: translateY(-10px); }
         }
         
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+            from { 
+                opacity: 0; 
+                transform: scale(0.8) translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
+        }
+        
         .use-case-title {
             font-size: 20px;
             font-weight: 700;
@@ -1963,6 +1979,302 @@
         .demo-description {
             opacity: 0.9;
             line-height: 1.6;
+        }
+        
+        /* Demo Modal Styles */
+        .demo-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .demo-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .demo-modal-content {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-xl);
+            max-width: 90vw;
+            max-height: 90vh;
+            width: 1200px;
+            overflow: hidden;
+            animation: scaleIn 0.3s ease-out;
+        }
+        
+        .demo-modal-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .demo-modal-header h2 {
+            color: white;
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .demo-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+        }
+        
+        .demo-modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+        
+        .demo-modal-body {
+            padding: 32px;
+            max-height: calc(90vh - 120px);
+            overflow-y: auto;
+            color: white;
+        }
+        
+        /* Demo Specific Styles */
+        .demo-container {
+            width: 100%;
+        }
+        
+        .demo-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            height: 600px;
+        }
+        
+        .demo-left, .demo-right {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .demo-left h3, .demo-right h4 {
+            margin: 0 0 16px 0;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .file-tree {
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            padding: 12px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .file-item.selected {
+            background: rgba(74, 144, 226, 0.3);
+            border: 1px solid rgba(74, 144, 226, 0.5);
+        }
+        
+        .file-item.folder > .file-children {
+            display: none;
+            margin-left: 20px;
+        }
+        
+        .file-item.folder.expanded > .file-children {
+            display: block;
+        }
+        
+        .file-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .file-name {
+            color: white;
+            font-size: 14px;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        
+        .action-btn {
+            background: rgba(74, 144, 226, 0.2);
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            background: rgba(74, 144, 226, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .demo-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .demo-tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .demo-tab.active {
+            background: rgba(74, 144, 226, 0.3);
+            border-color: rgba(74, 144, 226, 0.5);
+        }
+        
+        .demo-content {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .tab-content {
+            display: none;
+            height: 100%;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .file-preview {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .preview-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .preview-content {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .protocol-viewer {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .protocol-log {
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+        }
+        
+        .protocol-message {
+            margin-bottom: 20px;
+            border-left: 3px solid rgba(74, 144, 226, 0.5);
+            padding-left: 12px;
+        }
+        
+        .protocol-message.response {
+            border-left-color: rgba(34, 197, 94, 0.5);
+        }
+        
+        .message-header {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        
+        .message-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            color: white;
+            overflow-x: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-split {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .demo-left, .demo-right {
+                height: 300px;
+            }
         }
         
         /* Live Code Playground */
@@ -2423,6 +2735,20 @@
             </div>
         </div>
     </section>
+
+    <!-- Demo Modals -->
+    <div id="demoModal" class="demo-modal">
+        <div class="demo-modal-overlay" onclick="closeDemoModal()"></div>
+        <div class="demo-modal-content">
+            <div class="demo-modal-header">
+                <h2 id="demoModalTitle">Demo</h2>
+                <button class="demo-modal-close" onclick="closeDemoModal()">&times;</button>
+            </div>
+            <div class="demo-modal-body" id="demoModalBody">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
 
     <!-- Code Examples -->
     <section class="code-section">
@@ -3464,7 +3790,7 @@ console.log('Reading demo.txt:', readResource('file://demo.txt'));`;
             demoCards.forEach(card => {
                 card.addEventListener('click', () => {
                     const demoType = card.getAttribute('data-demo');
-                    alert(`Demo: ${demoType} - Feature kommer snart!`);
+                    openDemoModal(demoType);
                 });
             });
             
@@ -3475,6 +3801,460 @@ console.log('Reading demo.txt:', readResource('file://demo.txt'));`;
                     alert(`Video: ${videoType} - Tutorial kommer snart!`);
                 });
             });
+        }
+
+        // **DEMO MODAL FUNCTIONS**
+        function openDemoModal(demoType) {
+            const modal = document.getElementById('demoModal');
+            const title = document.getElementById('demoModalTitle');
+            const body = document.getElementById('demoModalBody');
+            
+            // Set title based on demo type
+            const titles = {
+                'filesystem': currentLang === 'da' ? 'Filsystem Integration Demo' : 
+                             currentLang === 'de' ? 'Dateisystem Integration Demo' :
+                             currentLang === 'es' ? 'Demo de Integración del Sistema de Archivos' :
+                             'Filesystem Integration Demo',
+                'database': currentLang === 'da' ? 'Database Forbindelse Demo' :
+                           currentLang === 'de' ? 'Datenbankverbindung Demo' :
+                           currentLang === 'es' ? 'Demo de Conexión de Base de Datos' :
+                           'Database Connection Demo',
+                'api': currentLang === 'da' ? 'API Integration Demo' :
+                       currentLang === 'de' ? 'API Integration Demo' :
+                       currentLang === 'es' ? 'Demo de Integración API' :
+                       'API Integration Demo',
+                'realtime': currentLang === 'da' ? 'Realtids Data Demo' :
+                           currentLang === 'de' ? 'Echtzeit-Daten Demo' :
+                           currentLang === 'es' ? 'Demo de Datos en Tiempo Real' :
+                           'Real-time Data Demo'
+            };
+            
+            title.textContent = titles[demoType] || 'Demo';
+            
+            // Generate demo content based on type
+            if (demoType === 'filesystem') {
+                body.innerHTML = generateFilesystemDemo();
+            } else if (demoType === 'database') {
+                body.innerHTML = generateDatabaseDemo();
+            } else if (demoType === 'api') {
+                body.innerHTML = generateApiDemo();
+            } else if (demoType === 'realtime') {
+                body.innerHTML = generateRealtimeDemo();
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Initialize demo functionality
+            if (demoType === 'filesystem') {
+                initFilesystemDemo();
+            }
+        }
+        
+        function closeDemoModal() {
+            const modal = document.getElementById('demoModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDemoModal();
+            }
+        });
+
+        // **FILESYSTEM DEMO GENERATOR**
+        function generateFilesystemDemo() {
+            return `
+                <div class="demo-container">
+                    <div class="demo-split">
+                        <div class="demo-left">
+                            <h3>📁 File System Explorer</h3>
+                            <div class="file-tree" id="fileTree">
+                                <div class="file-item folder" data-path="/">
+                                    <span class="file-icon">📁</span>
+                                    <span class="file-name">root</span>
+                                    <div class="file-children">
+                                        <div class="file-item folder" data-path="/documents">
+                                            <span class="file-icon">📁</span>
+                                            <span class="file-name">documents</span>
+                                            <div class="file-children">
+                                                <div class="file-item file" data-path="/documents/readme.txt">
+                                                    <span class="file-icon">📄</span>
+                                                    <span class="file-name">readme.txt</span>
+                                                </div>
+                                                <div class="file-item file" data-path="/documents/config.json">
+                                                    <span class="file-icon">⚙️</span>
+                                                    <span class="file-name">config.json</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="file-item folder" data-path="/logs">
+                                            <span class="file-icon">📁</span>
+                                            <span class="file-name">logs</span>
+                                            <div class="file-children">
+                                                <div class="file-item file" data-path="/logs/app.log">
+                                                    <span class="file-icon">📊</span>
+                                                    <span class="file-name">app.log</span>
+                                                </div>
+                                                <div class="file-item file" data-path="/logs/error.log">
+                                                    <span class="file-icon">❌</span>
+                                                    <span class="file-name">error.log</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="file-item file" data-path="/package.json">
+                                            <span class="file-icon">📦</span>
+                                            <span class="file-name">package.json</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="file-actions">
+                                <button class="action-btn" onclick="createFile()">📄 Create File</button>
+                                <button class="action-btn" onclick="createFolder()">📁 Create Folder</button>
+                                <button class="action-btn" onclick="deleteSelected()">🗑️ Delete</button>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-right">
+                            <div class="demo-tabs">
+                                <button class="demo-tab active" onclick="switchTab('preview')">📄 File Preview</button>
+                                <button class="demo-tab" onclick="switchTab('protocol')">🔌 MCP Protocol</button>
+                            </div>
+                            
+                            <div class="demo-content">
+                                <div id="previewTab" class="tab-content active">
+                                    <div class="file-preview">
+                                        <div class="preview-header">
+                                            <span id="previewFileName">Select a file to preview</span>
+                                        </div>
+                                        <div class="preview-content" id="previewContent">
+                                            <p style="opacity: 0.7; text-align: center; padding: 40px;">
+                                                Click on a file in the explorer to see its contents
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="protocolTab" class="tab-content">
+                                    <div class="protocol-viewer">
+                                        <h4>MCP Protocol Messages</h4>
+                                        <div class="protocol-log" id="protocolLog">
+                                            <div class="protocol-message">
+                                                <div class="message-header">Request:</div>
+                                                <pre class="message-content">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "resources/list",
+  "params": {}
+}</pre>
+                                            </div>
+                                            <div class="protocol-message response">
+                                                <div class="message-header">Response:</div>
+                                                <pre class="message-content">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "resources": [
+      {
+        "uri": "file:///documents/readme.txt",
+        "name": "readme.txt",
+        "mimeType": "text/plain"
+      },
+      {
+        "uri": "file:///documents/config.json", 
+        "name": "config.json",
+        "mimeType": "application/json"
+      }
+    ]
+  }
+}</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // **FILESYSTEM DEMO FUNCTIONALITY**
+        let selectedFile = null;
+        let fileContents = {
+            '/documents/readme.txt': `# MCP Filesystem Integration
+
+This is a demonstration of how MCP (Model Context Protocol) can interact with your filesystem securely.
+
+## Features:
+- File browsing and navigation
+- Reading file contents
+- Creating and deleting files
+- Real-time protocol visualization
+
+## Security:
+- All operations are sandboxed
+- Permissions are explicitly granted
+- Full audit trail of all actions`,
+
+            '/documents/config.json': `{
+  "name": "mcp-filesystem-demo",
+  "version": "1.0.0",
+  "settings": {
+    "allowRead": true,
+    "allowWrite": true,
+    "maxFileSize": "10MB",
+    "allowedExtensions": [".txt", ".json", ".md", ".log"]
+  },
+  "security": {
+    "sandboxed": true,
+    "auditLog": true,
+    "permissions": "explicit"
+  }
+}`,
+
+            '/logs/app.log': `[2024-06-14 12:00:00] INFO: MCP server started
+[2024-06-14 12:00:01] INFO: Filesystem resource registered
+[2024-06-14 12:00:02] INFO: Client connected from 127.0.0.1
+[2024-06-14 12:01:15] INFO: File read request: /documents/readme.txt
+[2024-06-14 12:01:16] INFO: File content delivered (2.1KB)
+[2024-06-14 12:02:30] INFO: Directory listing requested: /documents
+[2024-06-14 12:02:31] INFO: 2 files found and returned`,
+
+            '/logs/error.log': `[2024-06-14 11:58:32] WARN: Attempted access to restricted path: /system
+[2024-06-14 11:58:32] ERROR: Permission denied - path outside sandbox
+[2024-06-14 12:05:44] WARN: File not found: /documents/missing.txt
+[2024-06-14 12:05:44] ERROR: ENOENT: no such file or directory`,
+
+            '/package.json': `{
+  "name": "mcp-demo-project",
+  "version": "1.0.0",
+  "description": "Demonstration project for MCP filesystem integration",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest",
+    "mcp": "mcp-server filesystem"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "keywords": ["mcp", "filesystem", "ai", "integration"],
+  "author": "MCP Demo Team",
+  "license": "MIT"
+}`
+        };
+
+        function initFilesystemDemo() {
+            // Initialize folder expansion
+            document.querySelectorAll('.file-item.folder').forEach(folder => {
+                folder.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    folder.classList.toggle('expanded');
+                });
+            });
+
+            // Initialize file selection
+            document.querySelectorAll('.file-item.file').forEach(file => {
+                file.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    // Remove previous selection
+                    document.querySelectorAll('.file-item.selected').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    
+                    // Select current file
+                    file.classList.add('selected');
+                    selectedFile = file.getAttribute('data-path');
+                    
+                    // Update preview
+                    updateFilePreview(selectedFile);
+                    
+                    // Update protocol log
+                    addProtocolMessage('file-read', selectedFile);
+                });
+            });
+
+            // Expand root folder by default
+            document.querySelector('.file-item.folder[data-path="/"]').classList.add('expanded');
+        }
+
+        function updateFilePreview(filePath) {
+            const previewFileName = document.getElementById('previewFileName');
+            const previewContent = document.getElementById('previewContent');
+            
+            const fileName = filePath.split('/').pop();
+            previewFileName.textContent = fileName;
+            
+            const content = fileContents[filePath] || 'File content not available in demo';
+            previewContent.innerHTML = `<pre style="margin: 0; white-space: pre-wrap;">${content}</pre>`;
+        }
+
+        function addProtocolMessage(action, filePath) {
+            const protocolLog = document.getElementById('protocolLog');
+            if (!protocolLog) return;
+
+            const timestamp = new Date().toISOString();
+            let requestMessage, responseMessage;
+
+            if (action === 'file-read') {
+                requestMessage = {
+                    jsonrpc: "2.0",
+                    id: Math.floor(Math.random() * 1000),
+                    method: "resources/read",
+                    params: {
+                        uri: `file://${filePath}`
+                    }
+                };
+
+                responseMessage = {
+                    jsonrpc: "2.0",
+                    id: requestMessage.id,
+                    result: {
+                        contents: [{
+                            uri: `file://${filePath}`,
+                            mimeType: filePath.endsWith('.json') ? 'application/json' : 'text/plain',
+                            text: fileContents[filePath] || 'File content...'
+                        }]
+                    }
+                };
+            }
+
+            // Add request message
+            const requestDiv = document.createElement('div');
+            requestDiv.className = 'protocol-message';
+            requestDiv.innerHTML = `
+                <div class="message-header">Request (${timestamp}):</div>
+                <pre class="message-content">${JSON.stringify(requestMessage, null, 2)}</pre>
+            `;
+
+            // Add response message
+            const responseDiv = document.createElement('div');
+            responseDiv.className = 'protocol-message response';
+            responseDiv.innerHTML = `
+                <div class="message-header">Response:</div>
+                <pre class="message-content">${JSON.stringify(responseMessage, null, 2)}</pre>
+            `;
+
+            // Insert at the top
+            protocolLog.insertBefore(responseDiv, protocolLog.firstChild);
+            protocolLog.insertBefore(requestDiv, protocolLog.firstChild);
+
+            // Limit to 10 messages
+            const messages = protocolLog.querySelectorAll('.protocol-message');
+            if (messages.length > 10) {
+                for (let i = 10; i < messages.length; i++) {
+                    messages[i].remove();
+                }
+            }
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.demo-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function createFile() {
+            const fileName = prompt('Enter file name:');
+            if (fileName) {
+                alert(`Created file: ${fileName}\n(This is a demo - no actual file created)`);
+                addProtocolMessage('file-create', `/documents/${fileName}`);
+            }
+        }
+
+        function createFolder() {
+            const folderName = prompt('Enter folder name:');
+            if (folderName) {
+                alert(`Created folder: ${folderName}\n(This is a demo - no actual folder created)`);
+                addProtocolMessage('folder-create', `/${folderName}`);
+            }
+        }
+
+        function deleteSelected() {
+            if (selectedFile) {
+                if (confirm(`Delete ${selectedFile}?`)) {
+                    alert(`Deleted: ${selectedFile}\n(This is a demo - no actual file deleted)`);
+                    addProtocolMessage('file-delete', selectedFile);
+                }
+            } else {
+                alert('Please select a file first');
+            }
+        }
+
+        // **PLACEHOLDER DEMO GENERATORS** (To be implemented in next checkpoints)
+        function generateDatabaseDemo() {
+            return `
+                <div style="text-align: center; padding: 60px 20px;">
+                    <h3>🗄️ Database Connection Demo</h3>
+                    <p style="opacity: 0.8; margin-bottom: 20px;">Coming in Checkpoint 2...</p>
+                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px;">
+                        <p>This demo will include:</p>
+                        <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
+                            <li>SQLite in-browser database</li>
+                            <li>SQL query editor with syntax highlighting</li>
+                            <li>Sample database schemas</li>
+                            <li>MCP protocol visualization</li>
+                            <li>CRUD operation examples</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateApiDemo() {
+            return `
+                <div style="text-align: center; padding: 60px 20px;">
+                    <h3>🌐 API Integration Demo</h3>
+                    <p style="opacity: 0.8; margin-bottom: 20px;">Coming in Checkpoint 3...</p>
+                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px;">
+                        <p>This demo will include:</p>
+                        <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
+                            <li>HTTP request builder</li>
+                            <li>Real API examples (JSONPlaceholder, Weather)</li>
+                            <li>Authentication examples</li>
+                            <li>Request/response visualization</li>
+                            <li>cURL command generation</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateRealtimeDemo() {
+            return `
+                <div style="text-align: center; padding: 60px 20px;">
+                    <h3>📊 Real-time Data Demo</h3>
+                    <p style="opacity: 0.8; margin-bottom: 20px;">Coming in Checkpoint 4...</p>
+                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px;">
+                        <p>This demo will include:</p>
+                        <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
+                            <li>WebSocket simulation</li>
+                            <li>Live data streams (stocks, sensors)</li>
+                            <li>Real-time charts with Chart.js</li>
+                            <li>Subscription/unsubscription controls</li>
+                            <li>Data filtering and aggregation</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
         }
 
         // **LOADING SCREEN**
