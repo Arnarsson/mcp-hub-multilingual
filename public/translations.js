@@ -223,7 +223,7 @@ const translations = {
         "demo.database.title": "Datenbankverbindungen",
         "demo.database.description": "Erkunden Sie die nahtlose KI-Datenbank-Integration mit Echtzeitabfragen und sicheren Datenzugriffsmustern",
         "demo.api.title": "API-Integration",
-        "demo.api.description": "Verbinden Sie Drittanbieter-APIs und Webservices direkt in Ihre KI-Workflows mit MCP",
+        "demo.api.description": "Verbinden Sie Drittanbieter-APIs und Webservices direkte in Ihre KI-Workflows mit MCP",
         "demo.realtime.title": "Echtzeit-Datenströme",
         "demo.realtime.description": "Live-Datenstreaming und ereignisgesteuerte Architektur für moderne KI-Anwendungen",
         "code.title": "Produktionsreife Code-Beispiele",
@@ -405,4 +405,44 @@ if (typeof module !== 'undefined' && module.exports) {
 // Global assignment for browser use  
 if (typeof window !== 'undefined') {
     window.translations = translations;
+}
+
+async function fetchTranslations() {
+    try {
+        const response = await fetch('translations.json');
+        const translations = await response.json();
+        window.translations = translations;
+
+        // Run this after translations are loaded
+        const lang = getLanguage();
+        updateContent(lang);
+        updateBlogContent(lang);
+    } catch (error) {
+        console.error('Failed to load translations:', error);
+        updateContent('en'); 
+        updateBlogContent('en');
+    }
+}
+
+// Initial load
+fetchTranslations();
+
+function getLanguage() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('lang') || navigator.language.split('-')[0] || 'en';
+}
+
+function updateContent(lang) {
+    const langTranslations = window.translations[lang] || window.translations.en;
+    document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (langTranslations[key]) {
+            el.innerHTML = langTranslations[key];
+        }
+    });
+    document.documentElement.lang = lang;
+}
+
+function updateBlogContent(lang) {
+    // Your blog content update logic here
 }

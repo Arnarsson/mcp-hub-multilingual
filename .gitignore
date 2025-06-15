@@ -1,0 +1,29 @@
+# Node dependencies
+node_modules/
+
+# Build outputs and logs
+output/
+public/videos/
+*.webm
+*.mp4
+*.gif
+*.png
+*.jpg
+*.jpeg
+playwright-report/
+playwright/.cache/
+coverage/
+dist/
+
+# OS artifacts
+.DS_Store
+
+# IDE config
+.idea/
+.vscode/
+
+# Lock files generated for dev
+package-lock.json
+
+# Others
+auth.json 

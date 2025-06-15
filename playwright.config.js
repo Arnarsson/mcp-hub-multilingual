@@ -19,7 +19,7 @@ const config = {
   webServer: {
     command: 'npx serve public -l 3100 --single',
     url: 'http://localhost:3100',
-    reuseExistingServer: false,
+    reuseExistingServer: true,
     timeout: 10000
   }
 };
