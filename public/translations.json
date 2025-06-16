@@ -1,0 +1,136 @@
+{
+  "da": {
+    "site_title": "MCP Hub",
+    "nav_home": "Hjem",
+    "nav_features": "Features",
+    "nav_demos": "Demos",
+    "nav_blog": "Blog",
+    "nav_about": "Om",
+    "hero_title": "Mester Model Context Protocol",
+    "hero_subtitle": "Lær hvordan du bygger kraftfulde AI-integrationer med Model Context Protocol. Fra grundlæggende koncepter til enterprise implementering.",
+    "hero_cta_demos": "🚀 Prøv Live Demos",
+    "hero_cta_guides": "📚 Læs Guides"
+  },
+  "en": {
+    "site_title": "MCP Hub",
+    "nav_home": "Home",
+    "nav_features": "Features", 
+    "nav_demos": "Demos",
+    "nav_blog": "Blog",
+    "nav_about": "About",
+    "hero_title": "Master Model Context Protocol",
+    "hero_subtitle": "Learn how to build powerful AI integrations with Model Context Protocol. From basic concepts to enterprise implementation.",
+    "hero_cta_demos": "🚀 Try Live Demos",
+    "hero_cta_guides": "📚 Read Guides",
+    
+    "features_title": "Why Choose MCP?",
+    "features_subtitle": "Model Context Protocol revolutionizes how AI assistants connect to external systems. Experience the power of standardized AI integration.",
+    
+    "feature_secure_title": "Secure Integration",
+    "feature_secure_desc": "Built with security in focus. MCP includes advanced permission systems, authentication, and audit trails to ensure your data stays protected while enabling powerful AI capabilities.",
+    
+    "feature_universal_title": "Universal Compatibility", 
+    "feature_universal_desc": "Connect to any system, database, or API with standardized protocols. MCP works seamlessly across platforms, languages, and frameworks.",
+    
+    "feature_developer_title": "Developer Friendly",
+    "feature_developer_desc": "Simple, well-documented APIs with extensive examples. Get started in minutes with our comprehensive SDK and detailed tutorials.",
+    
+    "feature_realtime_title": "Real-time Performance",
+    "feature_realtime_desc": "Lightning-fast connections with optimized data streaming. Handle high-volume operations with minimal latency and maximum reliability.",
+    
+    "feature_scalable_title": "Enterprise Scalable",
+    "feature_scalable_desc": "Built to scale from prototype to production. Handle millions of requests with distributed architecture and auto-scaling capabilities.",
+    
+    "feature_community_title": "Thriving Community",
+    "feature_community_desc": "Join thousands of developers building the future of AI integration. Get support, share knowledge, and contribute to open-source innovation.",
+    
+    "demos_title": "Interactive Demos",
+    "demos_subtitle": "Experience MCP in action with live, interactive demonstrations that show real protocol communication and practical implementation examples.",
+    
+    "demo_run_filesystem": "Run Filesystem Demo",
+    "demo_run_database": "Run Database Demo", 
+    "demo_run_api": "Run API Demo",
+    "demo_run_realtime": "Run Real-time Demo",
+    
+    "blog_title": "Educational Resources",
+    "blog_subtitle": "Comprehensive guides, tutorials, and best practices to master Model Context Protocol development.",
+    
+    "blog.post1.title": "Understanding MCP: The Protocol That Connects AI to Everything",
+    "blog.post1.excerpt": "Discover how Model Context Protocol revolutionizes AI integrations by providing a standardized way to connect AI assistants to any data source or tool.",
+    
+    "blog.post2.title": "MCP Architecture Deep Dive: How It Really Works", 
+    "blog.post2.excerpt": "Explore the technical architecture behind MCP, including the client-server model, resource management, and security considerations.",
+    
+    "blog.post3.title": "Build Your First MCP Server: Complete Step-by-Step Guide",
+    "blog.post3.excerpt": "Hands-on tutorial to build a production-ready MCP server from scratch. Includes code examples and best practices.",
+    
+    "blog.post4.title": "MCP Use Cases: From File Management to Real-Time Data",
+    "blog.post4.excerpt": "Explore practical MCP implementations across industries with real examples and case studies.",
+    
+    "blog.readTime": "min read",
+    "blog.readMore": "Read More",
+    
+    "about_title": "About MCP Hub",
+    "about_subtitle": "Your comprehensive resource for mastering Model Context Protocol and building powerful AI integrations.",
+    
+    "about_mission_title": "Our Mission",
+    "about_mission_desc": "To democratize AI integration by providing comprehensive, accessible education on Model Context Protocol. We believe every developer should have the tools and knowledge to build secure, scalable AI-powered applications.",
+    
+    "about_current_title": "Current Focus",
+    "about_current_desc": "We're actively developing cutting-edge MCP implementations, creating educational content, and building a community of developers who are shaping the future of AI integration.",
+    
+    "about_different_title": "What Makes Us Different",
+    "about_different_desc": "Unlike other platforms, we focus exclusively on practical, hands-on learning. Every tutorial includes real code, working examples, and production-ready patterns you can use immediately.",
+    
+    "about_community_title": "Join Our Community",
+    "about_community_desc": "Connect with fellow developers, contribute to open-source projects, and stay up-to-date with the latest MCP developments. Together, we're building the future of AI integration.",
+    
+    "footer_learn_title": "Learn MCP",
+    "footer_getting_started": "Getting Started",
+    "footer_tutorials": "Tutorials",
+    "footer_examples": "Examples", 
+    "footer_best_practices": "Best Practices",
+    "footer_documentation": "Documentation",
+    
+    "footer_community_title": "Community",
+    "footer_github": "GitHub Repository",
+    "footer_discord": "Discord Server",
+    "footer_forum": "Community Forum",
+    "footer_blog": "Developer Blog",
+    "footer_contribute": "Contribute",
+    
+    "footer_support_title": "Support",
+    "footer_help": "Help & Support",
+    "footer_contact": "Contact Us",
+    "footer_bug_reports": "Bug Reports",
+    "footer_feature_requests": "Feature Requests", 
+    "footer_status": "Status Page",
+    
+    "footer_description": "MCP Hub is the definitive resource for Model Context Protocol education, providing comprehensive tutorials, examples, and community support for developers building AI-powered applications.",
+    "footer_copyright": "© 2024 MCP Hub. Built for the developer community."
+  },
+  "de": {
+    "site_title": "MCP Hub",
+    "nav_home": "Home",
+    "nav_features": "Features",
+    "nav_demos": "Demos", 
+    "nav_blog": "Blog",
+    "nav_about": "Über",
+    "hero_title": "Model Context Protocol Meistern",
+    "hero_subtitle": "Lernen Sie, wie Sie leistungsstarke KI-Integrationen mit Model Context Protocol erstellen. Von grundlegenden Konzepten bis zur Unternehmensimplementierung.",
+    "hero_cta_demos": "🚀 Live Demos Ausprobieren",
+    "hero_cta_guides": "📚 Anleitungen Lesen"
+  },
+  "es": {
+    "site_title": "MCP Hub",
+    "nav_home": "Inicio",
+    "nav_features": "Características",
+    "nav_demos": "Demos",
+    "nav_blog": "Blog", 
+    "nav_about": "Acerca de",
+    "hero_title": "Dominar Model Context Protocol",
+    "hero_subtitle": "Aprende cómo construir integraciones de IA poderosas con Model Context Protocol. Desde conceptos básicos hasta implementación empresarial.",
+    "hero_cta_demos": "🚀 Probar Demos en Vivo",
+    "hero_cta_guides": "📚 Leer Guías"
+  }
+} 

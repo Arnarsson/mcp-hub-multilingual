@@ -134,7 +134,13 @@ class ELI5Manager {
         // Store original article content if not done yet
         if (!this.originalContent) {
             const article = document.querySelector('article');
-            this.originalContent = article ? article.innerHTML : '';
+            if (article) {
+                // CRITICAL FIX: Only store article content, not entire body
+                this.originalContent = article.innerHTML;
+            } else {
+                console.error('No article element found for ELI5 adaptation');
+                return;
+            }
         }
 
         // Generate adapted content
@@ -208,16 +214,40 @@ class ELI5Manager {
     }
 
     displayAdaptedContent(content) {
-        // Don't replace the entire body, just update the main content area
+        // CRITICAL FIX: Preserve navigation and article structure
         const article = document.querySelector('article');
-        if (article && this.currentLevel === 'beginner') {
+        if (!article) return;
+
+        // Store the original article header elements to preserve them
+        const originalHeader = article.querySelector('h1');
+        const originalMeta = article.querySelector('.article-meta');
+        const backLink = document.querySelector('.back-link');
+        
+        if (this.currentLevel === 'beginner') {
+            // For beginner mode, replace main content but preserve header
             article.innerHTML = content;
-        } else if (this.currentLevel === 'intermediate') {
-            // For intermediate, we enhance the existing content
-            const article = document.querySelector('article');
-            if (article) {
-                article.innerHTML = content;
+            
+            // Re-add preserved elements at the beginning
+            if (originalHeader) {
+                const contentDiv = article.querySelector('.eli5-content');
+                if (contentDiv) {
+                    article.insertBefore(originalHeader.cloneNode(true), contentDiv);
+                }
             }
+            if (originalMeta) {
+                const headerElement = article.querySelector('h1');
+                if (headerElement) {
+                    headerElement.insertAdjacentElement('afterend', originalMeta.cloneNode(true));
+                }
+            }
+        } else if (this.currentLevel === 'intermediate') {
+            // For intermediate, enhance existing content without complete replacement
+            article.innerHTML = content;
+        }
+        
+        // Ensure back link is preserved outside article
+        if (backLink && backLink.parentNode !== article.parentNode) {
+            article.parentNode.insertBefore(backLink.cloneNode(true), article);
         }
         
         // Add adaptation indicator
@@ -245,7 +275,11 @@ class ELI5Manager {
         if (this.originalContent && this.currentLevel === 'expert') {
             const article = document.querySelector('article');
             if (article) {
+                // CRITICAL FIX: Safely restore original content
                 article.innerHTML = this.originalContent;
+                
+                // Ensure proper styling is maintained
+                article.style.position = 'relative';
             }
         }
         
@@ -676,12 +710,23 @@ class ELI5Manager {
 
 // Initialize ELI5 only on pages that have the required elements
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if this page has ELI5 elements before initializing
-    const eli5Button = document.getElementById('eli5-button');
-    const eli5Text = document.getElementById('eli5-text');
+    // CRITICAL FIX: Check for article element and prevent initialization on homepage
+    const article = document.querySelector('article');
+    const isHomepage = document.body.classList.contains('homepage') || 
+                      window.location.pathname === '/' || 
+                      window.location.pathname === '/index.html';
     
-    if (eli5Button && eli5Text) {
-        // Initialize the smart complexity control system
-        window.eli5Manager = new ELI5Manager();
+    // Only initialize on blog pages that have article content
+    if (article && !isHomepage) {
+        // Additional safety check - ensure article has substantial content
+        const articleText = article.textContent.trim();
+        if (articleText.length > 500) {  // Minimum content threshold
+            console.log('Initializing ELI5 Manager for blog article');
+            window.eli5Manager = new ELI5Manager();
+        } else {
+            console.log('Article content too short, skipping ELI5 initialization');
+        }
+    } else {
+        console.log('No article found or homepage detected, skipping ELI5 initialization');
     }
 });

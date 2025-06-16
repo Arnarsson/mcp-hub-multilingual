@@ -1,26 +1,46 @@
 // @ts-check
-/** @type {import('@playwright/test').PlaywrightTestConfig} */
-const config = {
+const { defineConfig, devices } = require('@playwright/test');
+
+/**
+ * @see https://playwright.dev/docs/test-configuration
+ */
+module.exports = defineConfig({
   testDir: './tests',
+  /* Run tests in files in parallel */
+  fullyParallel: true,
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  forbidOnly: !!process.env.CI,
+  /* Retry on CI only */
+  retries: process.env.CI ? 2 : 0,
+  /* Opt out of parallel tests on CI. */
+  workers: process.env.CI ? 1 : undefined,
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  reporter: 'html',
+  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: 'http://localhost:3100',
-    video: { mode: 'on', size: { width: 1280, height: 720 } },
-    screenshot: 'only-on-failure',
-    viewport: { width: 1280, height: 720 },
-    headless: true
+    /* Base URL to use in actions like `await page.goto('/')`. */
+    baseURL: 'http://localhost:4000',
+
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    trace: 'on-first-retry',
   },
+
+  /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { browserName: 'chromium' }
-    }
+      use: { ...devices['Desktop Chrome'] },
+    },
   ],
-  outputDir: 'public/videos',
+
+  /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npx serve public -l 3100 --single',
-    url: 'http://localhost:3100',
-    reuseExistingServer: true,
-    timeout: 10000
+    command: 'npm run serve',
+    port: 4000,
+    url: 'http://localhost:4000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+    stdout: 'ignore',
+    stderr: 'pipe',
   }
-};
-module.exports = config; 
+}); 

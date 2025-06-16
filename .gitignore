@@ -26,4 +26,7 @@ dist/
 package-lock.json
 
 # Others
-auth.json 
+auth.json
+*.log
+error-screenshot.png
+.env 
