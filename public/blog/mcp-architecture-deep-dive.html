@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Architecture Deep Dive: How It Really Works | MCP Hub</title>
+    <meta name="description" content="In-depth technical analysis of Model Context Protocol architecture. Understand how MCP works under the hood with detailed examples and best practices.">
+    <meta name="keywords" content="MCP architecture, Model Context Protocol, technical deep dive, MCP implementation, protocol design, AI integration">
+    
+    <!-- AI-optimized meta tags -->
+    <meta name="ai:content-type" content="technical-analysis">
+    <meta name="ai:primary-topic" content="MCP Architecture">
+    <meta name="ai:complexity" content="advanced">
+    <meta name="ai:article-type" content="deep-dive">
+    <meta name="ai:technical-depth" content="high">
+    <meta name="robots" content="index, follow, max-snippet:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mcp-hub.com/blog/mcp-architecture-deep-dive">
+    <meta property="og:title" content="MCP Architecture Deep Dive: How It Really Works">
+    <meta property="og:description" content="In-depth technical analysis of Model Context Protocol architecture. Understand how MCP works under the hood with detailed examples.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://mcp-hub.com/blog/mcp-architecture-deep-dive">
+    <meta property="twitter:title" content="MCP Architecture Deep Dive: How It Really Works">
+    <meta property="twitter:description" content="In-depth technical analysis of Model Context Protocol architecture. Understand how MCP works under the hood with detailed examples.">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": ["Article", "TechArticle"],
+        "learningResourceType": "Technical Analysis",
+        "proficiencyLevel": "Advanced",
+        "timeRequired": "PT12M",
+        "teaches": ["MCP Architecture", "Protocol Design", "System Components"],
+        "prerequisites": ["Understanding of network protocols", "Basic MCP knowledge"],
+        "headline": "MCP Architecture Deep Dive: How It Really Works",
+        "description": "In-depth technical analysis of Model Context Protocol architecture. Understand how MCP works under the hood with detailed examples and best practices.",
+        "author": {
+            "@type": "Organization",
+            "name": "MCP Hub"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "MCP Hub",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://mcp-hub.com/logo.png"
+            }
+        },
+        "datePublished": "2024-06-15",
+        "dateModified": "2024-06-15",
+        "educationalUse": "Professional Development",
+        "difficulty": "Advanced",
+        "isPartOf": {
+            "@type": "Course",
+            "name": "MCP Learning Path"
+        }
+    }
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="../css/main.css">
+    <!-- ELI5 Feature Styles -->
+    <link rel="stylesheet" href="../css/eli5.css">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --background: #0a0a0a;
+            --surface: #1a1a1a;
+            --text: #ffffff;
+            --text-secondary: #a1a1aa;
+            --gray-800: #1f2937;
+            --gray-700: #374151;
+            --gray-600: #4b5563;
+            --gray-400: #9ca3af;
+            --gray-200: #e5e7eb;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        header {
+            padding: 32px 0;
+            border-bottom: 1px solid var(--gray-800);
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary-dark);
+        }
+        
+        article {
+            padding: 48px 0;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .read-time {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .lead {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            line-height: 1.6;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 48px 0 24px 0;
+            color: var(--text);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 32px 0 16px 0;
+            color: var(--text);
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 24px 0 12px 0;
+            color: var(--text);
+        }
+        
+        p {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+        
+        ul, ol {
+            margin: 16px 0;
+            padding-left: 32px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        code {
+            background: var(--surface);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            color: var(--accent);
+        }
+        
+        pre {
+            background: var(--surface);
+            border: 1px solid var(--gray-800);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--text);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary)/10 0%, var(--secondary)/10 100%);
+            border: 1px solid var(--primary)/20;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+        
+        .highlight-box h4 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+        
+        .note {
+            background: var(--surface);
+            border-left: 4px solid var(--accent);
+            padding: 16px 20px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note p {
+            margin: 0;
+            color: var(--text);
+        }
+        
+        .warning {
+            background: var(--surface);
+            border-left: 4px solid var(--warning);
+            padding: 16px 20px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning p {
+            margin: 0;
+            color: var(--text);
+        }
+        
+        .step {
+            background: var(--surface);
+            border: 1px solid var(--gray-800);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -12px;
+            left: 24px;
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .step h4 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 16px 24px;
+            margin: 24px 0;
+            background: var(--surface);
+            border-radius: 0 8px 8px 0;
+        }
+        
+        blockquote p {
+            color: var(--text);
+            font-style: italic;
+        }
+        
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--gray-800);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        
+        .toc ul {
+            margin: 16px 0 0 0;
+        }
+        
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .toc a:hover {
+            color: var(--primary);
+        }
+        
+        .architecture-diagram {
+            background: var(--surface);
+            border: 2px solid var(--gray-800);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+            text-align: center;
+        }
+        
+        .layer {
+            background: linear-gradient(135deg, var(--primary)/20 0%, var(--secondary)/20 100%);
+            border: 1px solid var(--primary)/30;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 8px 0;
+            position: relative;
+        }
+        
+        .layer h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        
+        .layer p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 48px 0;
+            border-top: 1px solid var(--gray-800);
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                padding: 0 16px;
+            }
+            
+            .step-number {
+                position: static;
+                margin-bottom: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container">
+        <a href="../index.html" class="back-link">← Back to MCP Hub</a>
+    </header>
+
+    <main role="main" class="container" style="padding-top: 40px; padding-bottom: 40px;">
+        <article>
+            <h1>MCP Architecture Deep Dive: How It Really Works</h1>
+            
+            <div class="article-meta">
+                <time datetime="2024-06-15">June 15, 2024</time>
+                <span class="read-time">25 min read</span>
+            </div>
+
+            <!-- ELI5 Smart Complexity Control -->
+            <div class="eli5-container">
+                <button id="eli5-button" class="eli5-button" title="Simplify this article for easier understanding">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4"></path>
+                        <circle cx="12" cy="12" r="9"></circle>
+                    </svg>
+                    <span id="eli5-text">Explain Like I'm 5</span>
+                </button>
+                
+                <div id="eli5-loading" class="eli5-loading" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <span>Simplifying content...</span>
+                </div>
+            </div>
+
+            <p class="lead">Model Context Protocol isn't just another API standard - it's a carefully architected system designed for high-performance AI integration. This technical deep dive explores MCP's architecture, from low-level protocol details to production deployment patterns.</p>
+
+            <div class="toc">
+                <h3>Table of Contents</h3>
+                <ul>
+                    <li><a href="#protocol-stack">Protocol Stack Overview</a></li>
+                    <li><a href="#core-components">Core Components</a></li>
+                    <li><a href="#message-flow">Message Flow & Lifecycle</a></li>
+                    <li><a href="#transport-layer">Transport Layer</a></li>
+                    <li><a href="#security-model">Security Model</a></li>
+                    <li><a href="#performance">Performance & Optimization</a></li>
+                    <li><a href="#implementation-patterns">Implementation Patterns</a></li>
+                    <li><a href="#advanced-topics">Advanced Topics</a></li>
+                </ul>
+            </div>
+
+            <h2 id="protocol-stack">Protocol Stack Overview</h2>
+
+            <p>MCP follows a layered architecture that separates concerns and enables flexible deployment scenarios. Understanding this stack is crucial for architecting robust MCP integrations.</p>
+
+            <div class="architecture-diagram">
+                <div class="layer">
+                    <h4>Application Layer</h4>
+                    <p>AI model business logic, decision-making, and context management</p>
+                </div>
+                <div class="layer">
+                    <h4>MCP Protocol Layer</h4>
+                    <p>JSON-RPC 2.0 standardized message formats and protocol semantics</p>
+                </div>
+                <div class="layer">
+                    <h4>Transport Layer</h4>
+                    <p>STDIO | HTTP | WebSocket | Custom Transport</p>
+                </div>
+                <div class="layer">
+                    <h4>Physical Layer</h4>
+                    <p>TCP/IP | Unix Pipes | Memory Sharing</p>
+                </div>
+            </div>
+
+            <h3>Layer Responsibilities</h3>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <h4>Application Layer</h4>
+                <p>Handles AI-specific logic including:</p>
+                <ul>
+                    <li>Context window management</li>
+                    <li>Tool selection and orchestration</li>
+                    <li>Response synthesis and formatting</li>
+                    <li>Multi-turn conversation state</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <h4>Protocol Layer</h4>
+                <p>Implements MCP semantics over JSON-RPC 2.0:</p>
+                <ul>
+                    <li>Request/response message formatting</li>
+                    <li>Error handling and status codes</li>
+                    <li>Capability negotiation</li>
+                    <li>Resource and tool discovery</li>
+                </ul>
+            </div>
+
+            <h2 id="core-components">Core Components</h2>
+
+            <p>MCP's architecture centers around two primary components that handle different aspects of the protocol implementation.</p>
+
+            <h3>MCP Client Architecture</h3>
+
+            <pre><code>class MCPClient {
+  private transport: Transport;
+  private capabilities: ServerCapabilities;
+  private sessionId: string;
+  
+  constructor(transport: Transport) {
+    this.transport = transport;
+    this.sessionId = generateSessionId();
+  }
+  
+  async connect(): Promise&lt;void&gt; {
+    await this.transport.connect();
+    await this.handshake();
+    await this.discoverCapabilities();
+  }
+  
+  async callTool(
+    name: string, 
+    arguments: Record&lt;string, any&gt;
+  ): Promise&lt;ToolResult&gt; {
+    const request: ToolCallRequest = {
+      method: "tools/call",
+      params: { name, arguments }
+    };
+    
+    return await this.sendRequest(request);
+  }
+  
+  private async handshake(): Promise&lt;void&gt; {
+    const initRequest = {
+      method: "initialize",
+      params: {
+        protocolVersion: "1.0",
+        capabilities: {
+          sampling: {}
+        },
+        clientInfo: {
+          name: "my-client",
+          version: "1.0.0"
+        }
+      }
+    };
+    
+    await this.sendRequest(initRequest);
+  }
+}</code></pre>
+
+            <h3>MCP Server Architecture</h3>
+
+            <pre><code>class MCPServer {
+  private tools: Map&lt;string, Tool&gt; = new Map();
+  private resources: Map&lt;string, Resource&gt; = new Map();
+  private middleware: Middleware[] = [];
+  
+  registerTool(tool: Tool): void {
+    this.tools.set(tool.name, tool);
+  }
+  
+  async handleRequest(request: MCPRequest): Promise&lt;MCPResponse&gt; {
+    // Apply middleware
+    for (const mw of this.middleware) {
+      request = await mw.preProcess(request);
+    }
+    
+    switch (request.method) {
+      case "tools/call":
+        return await this.executeTool(request);
+      case "resources/read":
+        return await this.readResource(request);
+      case "tools/list":
+        return this.listTools();
+      default:
+        throw new MCPError("Method not found", -32601);
+    }
+  }
+  
+  private async executeTool(
+    request: ToolCallRequest
+  ): Promise&lt;ToolResult&gt; {
+    const tool = this.tools.get(request.params.name);
+    if (!tool) {
+      throw new MCPError("Tool not found", -32602);
+    }
+    
+    // Validate arguments
+    await this.validateArguments(tool.schema, request.params.arguments);
+    
+    // Check permissions
+    await this.checkPermissions(request, tool);
+    
+    // Execute tool
+    return await tool.execute(request.params.arguments);
+  }
+}</code></pre>
+
+            <h2 id="message-flow">Message Flow & Lifecycle</h2>
+
+            <p>Understanding MCP's message flow is essential for debugging and optimizing integrations. Here's how a typical tool execution unfolds:</p>
+
+            <h3>Initialization Sequence</h3>
+
+            <div class="highlight-box">
+                <h4>Complete Handshake Flow</h4>
+                <ol>
+                    <li><strong>Client connects</strong> to server via chosen transport</li>
+                    <li><strong>Initialize request</strong> - Client sends protocol version and capabilities</li>
+                    <li><strong>Initialize response</strong> - Server responds with its capabilities</li>
+                    <li><strong>Initialized notification</strong> - Client confirms connection ready</li>
+                </ol>
+            </div>
+
+            <pre><code>// 1. Initialize Request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "1.0",
+    "capabilities": {
+      "sampling": {}
+    },
+    "clientInfo": {
+      "name": "claude-desktop",
+      "version": "1.0.0"
+    }
+  }
+}
+
+// 2. Initialize Response
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "protocolVersion": "1.0",
+    "capabilities": {
+      "tools": {},
+      "resources": {}
+    },
+    "serverInfo": {
+      "name": "filesystem-server",
+      "version": "1.0.0"
+    }
+  }
+}
+
+// 3. Initialized Notification
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/initialized"
+}</code></pre>
+
+            <h3>Tool Execution Lifecycle</h3>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <h4>Request Validation</h4>
+                <p>Server validates the incoming request format, method name, and required parameters according to the MCP schema.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <h4>Permission Checking</h4>
+                <p>Security middleware verifies that the client has permission to execute the requested tool with the provided arguments.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <h4>Execution and Response</h4>
+                <p>Tool executes with sanitized arguments and returns structured results or error information.</p>
+            </div>
+
+            <h2 id="transport-layer">Transport Layer</h2>
+
+            <p>MCP's transport-agnostic design enables deployment across diverse environments. Each transport has specific characteristics and use cases.</p>
+
+            <h3>STDIO Transport</h3>
+
+            <p>Ideal for local processes and command-line tools. Provides low-latency communication via standard input/output streams.</p>
+
+            <pre><code>class StdioTransport implements Transport {
+  private process: ChildProcess;
+  
+  async connect(): Promise&lt;void&gt; {
+    this.process = spawn('node', ['mcp-server.js'], {
+      stdio: ['pipe', 'pipe', 'inherit']
+    });
+    
+    this.process.stdout.on('data', this.handleMessage.bind(this));
+  }
+  
+  async send(message: MCPMessage): Promise&lt;void&gt; {
+    const serialized = JSON.stringify(message) + '\n';
+    this.process.stdin.write(serialized);
+  }
+  
+  private handleMessage(data: Buffer): void {
+    const lines = data.toString().split('\n');
+    for (const line of lines) {
+      if (line.trim()) {
+        const message = JSON.parse(line);
+        this.emit('message', message);
+      }
+    }
+  }
+}</code></pre>
+
+            <h3>HTTP Transport</h3>
+
+            <p>Perfect for web-based implementations and remote servers. Supports both synchronous request/response and webhook patterns.</p>
+
+            <pre><code>class HttpTransport implements Transport {
+  private baseUrl: string;
+  private httpClient: HttpClient;
+  
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+    this.httpClient = new HttpClient({
+      timeout: 30000,
+      retries: 3
+    });
+  }
+  
+  async send(message: MCPMessage): Promise&lt;MCPResponse&gt; {
+    const response = await this.httpClient.post(
+      `${this.baseUrl}/mcp`, 
+      message,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-MCP-Version': '1.0'
+        }
+      }
+    );
+    
+    return response.data;
+  }
+}</code></pre>
+
+            <h3>WebSocket Integration</h3>
+
+            <p>Enables real-time bidirectional communication with persistent connections and automatic reconnection.</p>
+
+            <pre><code>class WebSocketTransport implements Transport {
+  private ws: WebSocket;
+  private reconnectAttempts = 0;
+  private maxReconnectAttempts = 5;
+  
+  async connect(url: string): Promise&lt;void&gt; {
+    return new Promise((resolve, reject) =&gt; {
+      this.ws = new WebSocket(url);
+      
+      this.ws.onopen = () =&gt; {
+        this.reconnectAttempts = 0;
+        resolve();
+      };
+      
+      this.ws.onmessage = (event) =&gt; {
+        const message = JSON.parse(event.data);
+        this.emit('message', message);
+      };
+      
+      this.ws.onclose = () =&gt; {
+        this.handleReconnect();
+      };
+    });
+  }
+  
+  private async handleReconnect(): Promise&lt;void&gt; {
+    if (this.reconnectAttempts &lt; this.maxReconnectAttempts) {
+      this.reconnectAttempts++;
+      const delay = Math.pow(2, this.reconnectAttempts) * 1000;
+      
+      setTimeout(() =&gt; {
+        this.connect(this.url);
+      }, delay);
+    }
+  }
+}</code></pre>
+
+            <h2 id="security-model">Security Model</h2>
+
+            <p>MCP implements a multi-layered security approach that balances functionality with protection against various attack vectors.</p>
+
+            <h3>Capability-Based Security</h3>
+
+            <p>Servers expose only approved capabilities, and clients can only access explicitly granted functions.</p>
+
+            <pre><code>class SecurityMiddleware {
+  private allowedTools: Set&lt;string&gt;;
+  private rateLimiter: RateLimiter;
+  
+  constructor(config: SecurityConfig) {
+    this.allowedTools = new Set(config.allowedTools);
+    this.rateLimiter = new RateLimiter({
+      windowMs: 60000,  // 1 minute
+      maxRequests: 100  // per client
+    });
+  }
+  
+  async preProcess(request: MCPRequest): Promise&lt;MCPRequest&gt; {
+    // Rate limiting
+    const clientId = this.extractClientId(request);
+    await this.rateLimiter.checkLimit(clientId);
+    
+    // Tool access control
+    if (request.method === 'tools/call') {
+      const toolName = request.params.name;
+      if (!this.allowedTools.has(toolName)) {
+        throw new MCPError('Tool not allowed', -32603);
+      }
+    }
+    
+    // Argument sanitization
+    return this.sanitizeArguments(request);
+  }
+  
+  private sanitizeArguments(request: MCPRequest): MCPRequest {
+    if (request.params?.arguments) {
+      // Remove potentially dangerous patterns
+      request.params.arguments = this.sanitizeObject(
+        request.params.arguments
+      );
+    }
+    return request;
+  }
+  
+  private sanitizeObject(obj: any): any {
+    const sanitized = {};
+    
+    for (const [key, value] of Object.entries(obj)) {
+      // Prevent path traversal
+      if (typeof value === 'string') {
+        if (value.includes('../') || value.includes('..\\')) {
+          throw new MCPError('Path traversal detected', -32602);
+        }
+      }
+      
+      // Recursive sanitization
+      if (typeof value === 'object' && value !== null) {
+        sanitized[key] = this.sanitizeObject(value);
+      } else {
+        sanitized[key] = value;
+      }
+    }
+    
+    return sanitized;
+  }
+}</code></pre>
+
+            <h3>Rate Limiting & Resource Protection</h3>
+
+            <pre><code>class RateLimiter {
+  private windows: Map&lt;string, Window&gt; = new Map();
+  
+  constructor(private config: RateLimitConfig) {}
+  
+  async checkLimit(clientId: string): Promise&lt;void&gt; {
+    const now = Date.now();
+    const window = this.getOrCreateWindow(clientId, now);
+    
+    // Sliding window algorithm
+    const windowStart = now - this.config.windowMs;
+    window.requests = window.requests.filter(
+      timestamp =&gt; timestamp &gt; windowStart
+    );
+    
+    if (window.requests.length &gt;= this.config.maxRequests) {
+      throw new MCPError('Rate limit exceeded', 429);
+    }
+    
+    window.requests.push(now);
+  }
+  
+  private getOrCreateWindow(clientId: string, now: number): Window {
+    if (!this.windows.has(clientId)) {
+      this.windows.set(clientId, { requests: [] });
+    }
+    return this.windows.get(clientId)!;
+  }
+}</code></pre>
+
+            <h2 id="performance">Performance & Optimization</h2>
+
+            <p>Production MCP implementations require careful attention to performance characteristics and optimization strategies.</p>
+
+            <h3>Connection Pooling</h3>
+
+            <p>For high-throughput scenarios, connection pooling reduces overhead and improves resource utilization.</p>
+
+            <pre><code>class ConnectionPool {
+  private pool: Connection[] = [];
+  private activeConnections: Set&lt;Connection&gt; = new Set();
+  private maxConnections: number;
+  
+  constructor(config: PoolConfig) {
+    this.maxConnections = config.maxConnections || 10;
+  }
+  
+  async getConnection(): Promise&lt;Connection&gt; {
+    // Return available connection from pool
+    if (this.pool.length &gt; 0) {
+      const connection = this.pool.pop()!;
+      this.activeConnections.add(connection);
+      return connection;
+    }
+    
+    // Create new connection if under limit
+    if (this.activeConnections.size &lt; this.maxConnections) {
+      const connection = await this.createConnection();
+      this.activeConnections.add(connection);
+      return connection;
+    }
+    
+    // Wait for available connection
+    return await this.waitForConnection();
+  }
+  
+  releaseConnection(connection: Connection): void {
+    this.activeConnections.delete(connection);
+    
+    if (connection.isHealthy()) {
+      this.pool.push(connection);
+    } else {
+      connection.close();
+    }
+  }
+}</code></pre>
+
+            <h3>Message Batching</h3>
+
+            <p>Optimize throughput by batching multiple requests when possible.</p>
+
+            <pre><code>class BatchProcessor {
+  private batch: MCPRequest[] = [];
+  private batchTimeout: NodeJS.Timeout | null = null;
+  private readonly maxBatchSize = 10;
+  private readonly batchTimeoutMs = 100;
+  
+  async enqueue(request: MCPRequest): Promise&lt;MCPResponse&gt; {
+    return new Promise((resolve, reject) =&gt; {
+      this.batch.push({
+        ...request,
+        resolve,
+        reject
+      });
+      
+      // Auto-flush on size
+      if (this.batch.length &gt;= this.maxBatchSize) {
+        this.flush();
+      }
+      
+      // Auto-flush on timeout
+      if (!this.batchTimeout) {
+        this.batchTimeout = setTimeout(() =&gt; {
+          this.flush();
+        }, this.batchTimeoutMs);
+      }
+    });
+  }
+  
+  private async flush(): Promise&lt;void&gt; {
+    if (this.batch.length === 0) return;
+    
+    const currentBatch = this.batch.splice(0);
+    
+    if (this.batchTimeout) {
+      clearTimeout(this.batchTimeout);
+      this.batchTimeout = null;
+    }
+    
+    try {
+      const responses = await this.processBatch(currentBatch);
+      
+      currentBatch.forEach((request, index) =&gt; {
+        request.resolve(responses[index]);
+      });
+    } catch (error) {
+      currentBatch.forEach(request =&gt; {
+        request.reject(error);
+      });
+    }
+  }
+}</code></pre>
+
+            <h2 id="implementation-patterns">Implementation Patterns</h2>
+
+            <h3>Graceful Degradation</h3>
+
+            <p>Implement fallback mechanisms when certain tools or resources become unavailable.</p>
+
+            <pre><code>class ResilientMCPClient {
+  private fallbackStrategies: Map&lt;string, FallbackStrategy&gt; = new Map();
+  
+  async callTool(name: string, args: any): Promise&lt;ToolResult&gt; {
+    try {
+      return await this.client.callTool(name, args);
+    } catch (error) {
+      const fallback = this.fallbackStrategies.get(name);
+      
+      if (fallback) {
+        console.warn(`Tool ${name} failed, using fallback strategy`);
+        return await fallback.execute(args);
+      }
+      
+      throw error;
+    }
+  }
+  
+  registerFallback(toolName: string, strategy: FallbackStrategy): void {
+    this.fallbackStrategies.set(toolName, strategy);
+  }
+}</code></pre>
+
+            <h3>Health Monitoring</h3>
+
+            <pre><code>class HealthMonitor {
+  private healthChecks: Map&lt;string, HealthCheck&gt; = new Map();
+  private metrics: HealthMetrics = new HealthMetrics();
+  
+  registerHealthCheck(name: string, check: HealthCheck): void {
+    this.healthChecks.set(name, check);
+  }
+  
+  async getHealthStatus(): Promise&lt;HealthStatus&gt; {
+    const results: HealthCheckResult[] = [];
+    
+    for (const [name, check] of this.healthChecks) {
+      try {
+        const startTime = Date.now();
+        const result = await Promise.race([
+          check.execute(),
+          this.timeout(5000)
+        ]);
+        
+        const duration = Date.now() - startTime;
+        this.metrics.recordHealthCheck(name, duration, true);
+        
+        results.push({
+          name,
+          status: 'healthy',
+          duration,
+          details: result
+        });
+      } catch (error) {
+        this.metrics.recordHealthCheck(name, 0, false);
+        
+        results.push({
+          name,
+          status: 'unhealthy',
+          error: error.message
+        });
+      }
+    }
+    
+    return {
+      status: results.every(r =&gt; r.status === 'healthy') ? 'healthy' : 'degraded',
+      checks: results,
+      timestamp: Date.now()
+    };
+  }
+}</code></pre>
+
+            <h2 id="advanced-topics">Advanced Topics</h2>
+
+            <h3>Custom Transport Implementation</h3>
+
+            <p>Create specialized transports for unique deployment requirements.</p>
+
+            <pre><code>// Redis-based transport for distributed systems
+class RedisTransport implements Transport {
+  private redis: Redis;
+  private responseChannels: Map&lt;string, Promise&lt;MCPResponse&gt;&gt; = new Map();
+  
+  constructor(redisConfig: RedisConfig) {
+    this.redis = new Redis(redisConfig);
+    this.setupResponseListener();
+  }
+  
+  async send(message: MCPMessage): Promise&lt;MCPResponse&gt; {
+    const messageId = message.id || generateId();
+    const responseChannel = `mcp:response:${messageId}`;
+    
+    // Setup response listener
+    const responsePromise = new Promise&lt;MCPResponse&gt;((resolve, reject) =&gt; {
+      const timeout = setTimeout(() =&gt; {
+        this.responseChannels.delete(messageId);
+        reject(new Error('Request timeout'));
+      }, 30000);
+      
+      this.responseChannels.set(messageId, { resolve, reject, timeout });
+    });
+    
+    // Send request
+    await this.redis.lpush('mcp:requests', JSON.stringify({
+      ...message,
+      id: messageId,
+      responseChannel
+    }));
+    
+    return responsePromise;
+  }
+  
+  private setupResponseListener(): void {
+    this.redis.subscribe('mcp:responses:*');
+    this.redis.on('message', (channel, message) =&gt; {
+      const messageId = channel.split(':').pop();
+      const pendingResponse = this.responseChannels.get(messageId);
+      
+      if (pendingResponse) {
+        clearTimeout(pendingResponse.timeout);
+        this.responseChannels.delete(messageId);
+        
+        try {
+          const response = JSON.parse(message);
+          pendingResponse.resolve(response);
+        } catch (error) {
+          pendingResponse.reject(error);
+        }
+      }
+    });
+  }
+}</code></pre>
+
+            <h3>Schema Evolution</h3>
+
+            <p>Handle schema changes gracefully in production environments.</p>
+
+            <pre><code>class SchemaVersionManager {
+  private migrations: Map&lt;string, SchemaMigration[]&gt; = new Map();
+  
+  registerMigration(fromVersion: string, toVersion: string, migration: SchemaMigration): void {
+    const key = `${fromVersion}-&gt;${toVersion}`;
+    if (!this.migrations.has(key)) {
+      this.migrations.set(key, []);
+    }
+    this.migrations.get(key)!.push(migration);
+  }
+  
+  async migrateMessage(message: MCPMessage, fromVersion: string, toVersion: string): Promise&lt;MCPMessage&gt; {
+    const migrationPath = this.findMigrationPath(fromVersion, toVersion);
+    
+    let currentMessage = message;
+    for (const migration of migrationPath) {
+      currentMessage = await migration.apply(currentMessage);
+    }
+    
+    return currentMessage;
+  }
+  
+  private findMigrationPath(from: string, to: string): SchemaMigration[] {
+    // Implement path finding algorithm (BFS/DFS)
+    // Return sequence of migrations to apply
+    return [];
+  }
+}</code></pre>
+
+            <div class="warning">
+                <p><strong>Production Considerations:</strong> Always implement comprehensive logging, monitoring, and alerting for MCP deployments. The protocol's flexibility requires careful attention to security, performance, and operational concerns.</p>
+            </div>
+
+            <h2 id="conclusion">Conclusion</h2>
+
+            <p>MCP's architecture demonstrates thoughtful design that balances simplicity with production requirements. The layered approach, transport agnosticism, and security-first design make it suitable for everything from local development tools to large-scale distributed AI systems.</p>
+
+            <blockquote>
+                <p>"Architecture is about the important stuff... whatever that is." - Ralph Johnson. In MCP's case, the "important stuff" is enabling reliable, secure, and scalable AI integration.</p>
+            </blockquote>
+
+            <div class="highlight-box">
+                <h4>Key Takeaways</h4>
+                <ul>
+                    <li><strong>Layered Design:</strong> Clean separation of concerns enables flexible deployment</li>
+                    <li><strong>Transport Agnostic:</strong> Choose the right transport for your use case</li>
+                    <li><strong>Security First:</strong> Multi-layered protection against common attack vectors</li>
+                    <li><strong>Performance Aware:</strong> Built-in patterns for high-throughput scenarios</li>
+                    <li><strong>Production Ready:</strong> Comprehensive patterns for monitoring and resilience</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h4>Next Steps</h4>
+                <ul>
+                    <li>Review the <a href="build-first-server.html">Build Your First MCP Server</a> tutorial for hands-on implementation</li>
+                    <li>Explore <a href="mcp-use-cases.html">real-world use cases</a> and deployment patterns</li>
+                    <li>Study the <a href="https://spec.modelcontextprotocol.io/">official MCP specification</a> for complete protocol details</li>
+                    <li>Join the MCP community to discuss advanced implementation strategies</li>
+                </ul>
+            </div>
+
+            <p>The future of AI integration is built on solid architectural foundations. MCP provides those foundations while remaining flexible enough to evolve with the rapidly changing AI landscape.</p>
+        </article>
+    </main>
+
+    <footer>
+        © 2024 MCP Hub. All rights reserved.
+    </footer>
+
+    <!-- ELI5 Feature Script -->
+    <script src="../js/eli5.js"></script>
+
+</body>
+</html>

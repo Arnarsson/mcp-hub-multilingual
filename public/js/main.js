@@ -3,13 +3,12 @@
 // Enhanced Interactivity & Animations
 // ===================================
 
-import { initToolbar } from '@stagewise/toolbar';
-
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  initToolbar({
-    plugins: [],
-  });
-}
+// Removed @stagewise/toolbar import to fix module loading
+// if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+//   initToolbar({
+//     plugins: [],
+//   });
+// }
 
 class MCPHub {
     constructor() {
@@ -34,7 +33,7 @@ class MCPHub {
         this.setupDemos();
         this.setupAnimations();
         this.setupMobileMenu();
-        this.setupBlogCardNavigation();
+        // this.setupBlogCardNavigation(); // Removed to prevent interference with natural anchor navigation
         await this.loadTranslations();
         this.setupPerformanceOptimizations();
     }
@@ -264,15 +263,41 @@ class MCPHub {
     
     // Demo System
     setupDemos() {
-        this.setupDemoRunners();
         this.setupDemoModal();
+        this.setupDemoRunners();
     }
     
     setupDemoRunners() {
-        window.runFilesystemDemo = this.runFilesystemDemo.bind(this);
-        window.runDatabaseDemo = this.runDatabaseDemo.bind(this);
-        window.runApiDemo = this.runApiDemo.bind(this);
-        window.runRealtimeDemo = this.runRealtimeDemo.bind(this);
+        // Make demo functions globally available
+        window.runFilesystemDemo = () => this.runFilesystemDemo();
+        window.runDatabaseDemo = () => this.runDatabaseDemo();
+        window.runApiDemo = () => this.runApiDemo();
+        window.runRealtimeDemo = () => this.runRealtimeDemo();
+        
+        // Setup demo card switching
+        this.setupDemoCardSwitching();
+    }
+    
+    setupDemoCardSwitching() {
+        const demoCards = document.querySelectorAll('.demo-card[data-demo]');
+        const demoPanels = document.querySelectorAll('.demo-panel');
+        
+        demoCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const demoType = card.getAttribute('data-demo');
+                
+                // Remove active class from all cards and panels
+                demoCards.forEach(c => c.classList.remove('active'));
+                demoPanels.forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked card and corresponding panel
+                card.classList.add('active');
+                const targetPanel = document.getElementById(`${demoType}Demo`);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
+            });
+        });
     }
     
     async runFilesystemDemo() {
@@ -442,28 +467,36 @@ class MCPHub {
     }
     
     setupDemoModal() {
-        window.openDemoModal = (title, content) => {
+        this.openDemoModal = (title, content) => {
             const modal = document.getElementById('demoModal');
             const modalContent = document.getElementById('modalContent');
             
             if (modalContent) {
-                modalContent.innerHTML = `<h3 style=\"margin-bottom: 1rem;\">${title}</h3>${content}`;
+                modalContent.innerHTML = `<h3 style="margin-bottom: 1rem; color: white;">${title}</h3>${content}`;
             }
             
-            modal?.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
         };
         
-        window.closeDemoModal = () => {
+        this.closeDemoModal = () => {
             const modal = document.getElementById('demoModal');
-            modal?.classList.remove('active');
-            document.body.style.overflow = '';
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         };
+
+        // Make functions globally available
+        window.openDemoModal = this.openDemoModal;
+        window.closeDemoModal = this.closeDemoModal;
         
         // Close modal on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                window.closeDemoModal();
+                this.closeDemoModal();
             }
         });
         
@@ -471,7 +504,7 @@ class MCPHub {
         const modal = document.getElementById('demoModal');
         modal?.addEventListener('click', (e) => {
             if (e.target === modal) {
-                window.closeDemoModal();
+                this.closeDemoModal();
             }
         });
     }
@@ -540,9 +573,10 @@ class MCPHub {
         try {
             // Check if translations.js exists and has been loaded
             if (typeof window.translations !== 'undefined') {
+                // Use translations directly and let applyTranslations handle key conversion
                 this.translations = window.translations;
             } else {
-                // Fallback translations
+                // Enhanced fallback translations
                 this.translations = {
                     da: {
                         site_title: 'MCP Hub',
@@ -550,7 +584,15 @@ class MCPHub {
                         nav_features: 'Features',
                         nav_demos: 'Demos',
                         nav_blog: 'Blog',
-                        nav_about: 'Om'
+                        nav_about: 'Om',
+                        hero_title: 'Mester Model Context Protocol',
+                        hero_subtitle: 'Lær MCP gennem omfattende guides og praktiske eksempler.',
+                        hero_cta_demos: 'Udforsk Demos',
+                        hero_cta_guides: 'Se Guides',
+                        features_title: 'Hvorfor Vælge MCP?',
+                        demos_title: 'Interaktive MCP Demos',
+                        blog_title: 'MCP Learning Hub',
+                        about_title: 'Om MCP Hub'
                     },
                     en: {
                         site_title: 'MCP Hub',
@@ -558,7 +600,47 @@ class MCPHub {
                         nav_features: 'Features',
                         nav_demos: 'Demos',
                         nav_blog: 'Blog',
-                        nav_about: 'About'
+                        nav_about: 'About',
+                        hero_title: 'Master Model Context Protocol',
+                        hero_subtitle: 'Learn MCP through comprehensive guides and practical examples.',
+                        hero_cta_demos: 'Explore Demos',
+                        hero_cta_guides: 'View Guides',
+                        features_title: 'Why Choose MCP?',
+                        demos_title: 'Interactive MCP Demos',
+                        blog_title: 'MCP Learning Hub',
+                        about_title: 'About MCP Hub'
+                    },
+                    de: {
+                        site_title: 'MCP Hub',
+                        nav_home: 'Startseite',
+                        nav_features: 'Features',
+                        nav_demos: 'Demos',
+                        nav_blog: 'Blog',
+                        nav_about: 'Über',
+                        hero_title: 'Model Context Protocol meistern',
+                        hero_subtitle: 'Lernen Sie MCP durch umfassende Anleitungen und praktische Beispiele.',
+                        hero_cta_demos: 'Demos erkunden',
+                        hero_cta_guides: 'Anleitungen ansehen',
+                        features_title: 'Warum MCP wählen?',
+                        demos_title: 'Interaktive MCP Demos',
+                        blog_title: 'MCP Learning Hub',
+                        about_title: 'Über MCP Hub'
+                    },
+                    es: {
+                        site_title: 'MCP Hub',
+                        nav_home: 'Inicio',
+                        nav_features: 'Características',
+                        nav_demos: 'Demos',
+                        nav_blog: 'Blog',
+                        nav_about: 'Acerca de',
+                        hero_title: 'Dominar Model Context Protocol',
+                        hero_subtitle: 'Aprenda MCP a través de guías completas y ejemplos prácticos.',
+                        hero_cta_demos: 'Explorar Demos',
+                        hero_cta_guides: 'Ver Guías',
+                        features_title: '¿Por qué elegir MCP?',
+                        demos_title: 'Demos Interactivos de MCP',
+                        blog_title: 'MCP Learning Hub',
+                        about_title: 'Acerca de MCP Hub'
                     }
                 };
             }
@@ -571,15 +653,26 @@ class MCPHub {
     
     applyTranslations(lang) {
         const elements = document.querySelectorAll('[data-translate]');
-        const translations = this.translations[lang] || this.translations['da'];
+        const translations = this.translations[lang] || this.translations['en'];
         
         elements.forEach(element => {
             const key = element.getAttribute('data-translate');
+            // Convert underscore notation to dot notation for translation lookup
+            const dotKey = key.replace(/_/g, '.');
+            
+            let translationText = null;
+            // Try both underscore key and dot key
             if (translations && translations[key]) {
+                translationText = translations[key];
+            } else if (translations && translations[dotKey]) {
+                translationText = translations[dotKey];
+            }
+            
+            if (translationText) {
                 if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                    element.placeholder = translations[key];
+                    element.placeholder = translationText;
                 } else {
-                    element.textContent = translations[key];
+                    element.textContent = translationText;
                 }
             }
         });
@@ -602,12 +695,17 @@ class MCPHub {
         const blogCards = document.querySelectorAll('.blog-card');
         blogCards.forEach(card => {
             card.addEventListener('click', (e) => {
-                // Respect clicks on actual anchor to avoid double handling
-                const target = e.target.closest('a');
-                if (target && target.href) return;
+                // Check if click was on the card but not on an anchor
+                const targetAnchor = e.target.closest('a');
+                if (targetAnchor) {
+                    // Let the anchor handle the navigation naturally
+                    return;
+                }
+                
+                // If clicked on the card itself (not on an anchor), find the link and navigate
                 const link = card.querySelector('a.blog-card-link');
-                if (link) {
-                    window.location.href = link.getAttribute('href');
+                if (link && link.href && link.href !== '#') {
+                    window.location.href = link.href;
                 }
             });
         });

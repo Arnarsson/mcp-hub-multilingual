@@ -7,6 +7,16 @@
     <meta name="description" content="Learn to build a complete MCP server in Python from scratch. This comprehensive tutorial covers setup, implementation, resources, tools, and deployment with practical examples.">
     <meta name="keywords" content="MCP server, Python MCP, Model Context Protocol, AI integration, Python tutorial, MCP development">
     
+    <!-- AI-optimized meta tags -->
+    <meta name="ai:content-type" content="technical-tutorial">
+    <meta name="ai:primary-topic" content="Model Context Protocol">
+    <meta name="ai:complexity" content="intermediate">
+    <meta name="ai:programming-language" content="python">
+    <meta name="ai:tutorial-type" content="step-by-step">
+    <meta name="robots" content="index, follow, max-snippet:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://mcp-hub.com/blog/build-first-server">
@@ -23,7 +33,12 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "Article",
+        "@type": ["Article", "TechArticle"],
+        "learningResourceType": "Tutorial",
+        "proficiencyLevel": "Intermediate",
+        "timeRequired": "PT20M",
+        "teaches": ["MCP Server Development", "Python Programming", "AI Integration"],
+        "prerequisites": ["Basic Python knowledge", "Understanding of APIs"],
         "headline": "Build Your First MCP Server in Python: Complete Step-by-Step Guide",
         "description": "Learn to build a complete MCP server in Python from scratch. This comprehensive tutorial covers setup, implementation, resources, tools, and deployment with practical examples.",
         "author": {
@@ -39,7 +54,14 @@
             }
         },
         "datePublished": "2024-06-15",
-        "dateModified": "2024-06-15"
+        "dateModified": "2024-06-15",
+        "educationalUse": "Professional Development",
+        "difficulty": "Intermediate",
+        "hasPart": [
+            {"@type": "HowToSection", "name": "Environment Setup"},
+            {"@type": "HowToSection", "name": "MCP Server Implementation"},
+            {"@type": "HowToSection", "name": "Testing and Deployment"}
+        ]
     }
     </script>
     
@@ -48,6 +70,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="../css/main.css">
     <!-- ELI5 Feature Styles -->
     <link rel="stylesheet" href="../css/eli5.css">
     
@@ -363,16 +387,32 @@
 <body>
 
     <header class="container">
-        <a href="../index.html">← Back to MCP Hub</a>
+        <a href="../index.html" class="back-link">← Back to MCP Hub</a>
     </header>
 
     <main role="main" class="container" style="padding-top: 40px; padding-bottom: 40px;">
-        <article>
+        <article itemscope itemtype="https://schema.org/TechArticle" data-ai-readable="true" data-content-type="tutorial" data-topic="mcp-server-development">
             <h1>Build Your First MCP Server: A Complete Step-by-Step Tutorial</h1>
             
             <div class="article-meta">
                 <time datetime="2024-06-15">June 15, 2024</time>
                 <span class="read-time">20 min read</span>
+            </div>
+
+            <!-- ELI5 Smart Complexity Control -->
+            <div class="eli5-container">
+                <button id="eli5-button" class="eli5-button" title="Simplify this article for easier understanding">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4"></path>
+                        <circle cx="12" cy="12" r="9"></circle>
+                    </svg>
+                    <span id="eli5-text">Explain Like I'm 5</span>
+                </button>
+                
+                <div id="eli5-loading" class="eli5-loading" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <span>Simplifying content...</span>
+                </div>
             </div>
 
             <p>Ready to build your first Model Context Protocol (MCP) server? This comprehensive tutorial will guide you through creating a production-ready MCP server from scratch. By the end, you'll have a fully functional server that AI assistants can connect to and interact with.</p>

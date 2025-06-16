@@ -1,0 +1,641 @@
+/* ===================================
+   ELI5 Smart Complexity Control System
+   Transform technical content for any audience
+   =================================== */
+
+.eli5-container {
+    margin: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+/* Floating ELI5 Button - Always Visible */
+.eli5-floating-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-secondary);
+    border: none;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-2xl), 0 0 30px rgba(139, 92, 246, 0.4);
+    cursor: pointer;
+    z-index: 1000;
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    /* animation: float 3s ease-in-out infinite; - Disabled for better click stability */
+}
+
+.eli5-floating-button:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-2xl), 0 0 50px rgba(139, 92, 246, 0.6);
+}
+
+.eli5-floating-button.active {
+    background: var(--accent);
+    box-shadow: var(--shadow-2xl), 0 0 30px rgba(16, 185, 129, 0.4);
+}
+
+/* Inline ELI5 Button */
+.eli5-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    position: relative;
+    overflow: hidden;
+}
+
+.eli5-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.eli5-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.eli5-button:hover::before {
+    left: 100%;
+}
+
+.eli5-button.active {
+    background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.eli5-button.active:hover {
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.eli5-button svg {
+    transition: transform 0.3s ease;
+}
+
+.eli5-button:hover svg {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.eli5-loading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-secondary, #a1a1aa);
+    font-size: 0.9rem;
+    padding: 12px 20px;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--surface, #1a1a1a);
+    border-top: 2px solid #ff6b6b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ELI5 Content Styles */
+.eli5-content {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.05) 0%, rgba(255, 167, 38, 0.05) 100%);
+    border: 2px solid #ff6b6b;
+    border-radius: 20px;
+    padding: 32px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.eli5-content::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 167, 38, 0.1) 0%, transparent 70%);
+    z-index: 0;
+}
+
+.eli5-content > * {
+    position: relative;
+    z-index: 1;
+}
+
+.eli5-header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px dashed #ff6b6b;
+}
+
+.eli5-header h2 {
+    color: #ff6b6b;
+    font-size: 2rem;
+    margin-bottom: 16px;
+    text-shadow: 0 2px 4px rgba(255, 107, 107, 0.2);
+}
+
+.eli5-intro {
+    font-size: 1.1rem;
+    color: var(--text, #ffffff);
+    font-weight: 500;
+    margin: 0;
+}
+
+.eli5-section {
+    margin: 32px 0;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    border-left: 4px solid #ffa726;
+}
+
+.eli5-section h3 {
+    color: #ffa726;
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.eli5-section p {
+    color: var(--text-secondary, #a1a1aa);
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.eli5-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.eli5-section li {
+    color: var(--text-secondary, #a1a1aa);
+    margin-bottom: 12px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.eli5-section li::before {
+    content: '🌟';
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.eli5-section em {
+    color: #ff6b6b;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.eli5-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.eli5-step {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 16px;
+    border-radius: 12px;
+    border-left: 4px solid #4caf50;
+}
+
+.eli5-step strong {
+    color: #4caf50;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.eli5-conversation {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+    margin: 16px 0;
+}
+
+.message {
+    padding: 12px 16px;
+    margin: 8px 0;
+    border-radius: 18px;
+    max-width: 80%;
+    position: relative;
+}
+
+.message.ai {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.message.server {
+    background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+    color: white;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.eli5-summary {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 167, 38, 0.1) 100%);
+    border: 2px solid #ffa726;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    margin-top: 32px;
+}
+
+.eli5-summary h3 {
+    color: #ffa726;
+    margin-bottom: 16px;
+}
+
+.eli5-summary p {
+    color: var(--text, #ffffff);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.eli5-summary strong {
+    color: #ff6b6b;
+}
+
+.eli5-notice {
+    background: linear-gradient(135deg, #ffa726 0%, #ff6b6b 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin: 24px 0;
+    box-shadow: 0 4px 15px rgba(255, 167, 38, 0.3);
+}
+
+.eli5-notice-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+}
+
+.eli5-icon {
+    font-size: 1.2rem;
+}
+
+.eli5-error {
+    background: #ef4444;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-size: 0.9rem;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .eli5-content {
+        padding: 24px 16px;
+        margin: 24px 0;
+    }
+    
+    .eli5-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .eli5-section {
+        padding: 16px;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+    
+    .eli5-button {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .eli5-content {
+        border-color: #ff8a80;
+    }
+    
+    .eli5-section {
+        background: rgba(255, 255, 255, 0.02);
+        border-left-color: #ffb74d;
+    }
+    
+    .eli5-conversation {
+        background: rgba(0, 0, 0, 0.4);
+    }
+}
+
+/* Animation for content transitions */
+.eli5-content {
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===================================
+   Smart Complexity Control Panel
+   =================================== */
+
+/* ELI5 Control Panel */
+.eli5-panel {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    min-width: 280px;
+    transform: translateY(20px) scale(0.9);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 999;
+}
+
+/* Add missing float animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+}
+
+.eli5-panel.active {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+.eli5-panel-header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+}
+
+.eli5-panel-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-sm);
+}
+
+.eli5-panel-subtitle {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+/* Complexity Levels */
+.complexity-levels {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.complexity-level {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--glass-white);
+    border: 2px solid transparent;
+    border-radius: var(--radius-xl);
+    cursor: pointer;
+    transition: var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.complexity-level::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    z-index: -1;
+    transition: var(--transition-base);
+}
+
+.complexity-level:hover::before {
+    opacity: 0.1;
+}
+
+.complexity-level.active {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+    transform: translateX(4px);
+}
+
+.complexity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+}
+
+.complexity-icon.beginner { background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); }
+.complexity-icon.intermediate { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
+.complexity-icon.expert { background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); }
+
+.complexity-info h4 {
+    font-weight: 600;
+    color: var(--gray-900);
+    margin: 0 0 4px 0;
+}
+
+.complexity-info p {
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Content Adaptation Styles */
+.eli5-adaptive-content {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: var(--transition-base);
+}
+
+.eli5-adaptive-content.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Beginner Mode Styles */
+[data-eli5-level="beginner"] .technical-term {
+    background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+    padding: 2px 6px;
+    border-radius: 4px;
+    position: relative;
+    cursor: help;
+    border-bottom: 2px dotted var(--primary);
+}
+
+[data-eli5-level="beginner"] .technical-term:hover::after {
+    content: attr(data-simple);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gray-900);
+    color: white;
+    padding: var(--space-sm);
+    border-radius: var(--radius-lg);
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1001;
+    box-shadow: var(--shadow-lg);
+}
+
+/* Intermediate Mode Styles */
+[data-eli5-level="intermediate"] .code-example {
+    background: var(--glass-white);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin: var(--space-md) 0;
+    font-family: var(--font-mono);
+    position: relative;
+}
+
+[data-eli5-level="intermediate"] .code-example::before {
+    content: "💡 Code Example";
+    position: absolute;
+    top: -12px;
+    left: var(--space-md);
+    background: var(--primary);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Expert Mode Styles */
+[data-eli5-level="expert"] .deep-dive {
+    border-left: 4px solid var(--secondary);
+    padding-left: var(--space-md);
+    margin: var(--space-lg) 0;
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+/* Content Hiding/Showing by Level */
+.content-beginner { display: none; }
+.content-intermediate { display: none; }
+.content-expert { display: none; }
+
+[data-eli5-level="beginner"] .content-beginner { display: block; }
+[data-eli5-level="intermediate"] .content-intermediate { display: block; }
+[data-eli5-level="expert"] .content-expert { display: block; }
+
+/* Auto-adaptation indicators */
+.adaptation-indicator {
+    position: absolute;
+    top: -8px;
+    right: var(--space-md);
+    background: var(--accent);
+    color: white;
+    padding: 4px 8px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+/* Mobile Responsiveness for Panel */
+@media (max-width: 768px) {
+    .eli5-floating-button {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 12px;
+    }
+    
+    .eli5-panel {
+        bottom: 80px;
+        right: 20px;
+        left: 20px;
+        min-width: auto;
+    }
+    
+    .complexity-levels {
+        flex-direction: column;
+    }
+    
+    .complexity-level {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-sm);
+    }
+}
