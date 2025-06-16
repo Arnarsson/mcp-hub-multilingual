@@ -45,6 +45,7 @@
     
     <!-- Premium Design System CSS -->
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/consultation.css">
     
     <!-- Chart.js for Real-time Data Demo -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -91,7 +92,7 @@
                     <li><a href="#home" class="nav-link active" data-translate="nav_home">Hjem</a></li>
                     <li><a href="#features" class="nav-link" data-translate="nav_features">Features</a></li>
                     <li><a href="#demos" class="nav-link" data-translate="nav_demos">Demos</a></li>
-                    <li><a href="#blog" class="nav-link" data-translate="nav_blog">Blog</a></li>
+                    <li><a href="blog/index.html" class="nav-link" data-translate="nav_blog">Blog</a></li>
                     <li><a href="#about" class="nav-link" data-translate="nav_about">Om</a></li>
                 </ul>
                 
@@ -157,29 +158,17 @@
     <section class="hero" id="home">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title" data-translate="hero_title">
-                    Mester Model Context Protocol
-                </h1>
+                <h1 data-translate="hero_title">Mester Model Context Protocol</h1>
                 <p class="hero-subtitle" data-translate="hero_subtitle">
-                    Forbind AI til alt med den næste generation af integration protokol. 
-                    Lær MCP gennem omfattende guides, rigtige eksempler og hands-on tutorials.
+                    Lær hvordan du bygger kraftfulde AI-integrationer med Model Context Protocol. 
+                    Fra grundlæggende koncepter til enterprise implementering.
                 </p>
-                <div class="hero-actions">
-                    <a href="#demos" class="btn btn-primary btn-lg" data-translate="hero_cta_primary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="5,3 19,12 5,21"></polygon>
-                        </svg>
-                        Start Med Demos
+                <div class="hero-cta">
+                    <a href="#demos" class="btn btn-primary" data-translate="hero_cta_demos">
+                        🚀 Prøv Live Demos
                     </a>
-                    <a href="#blog" class="btn btn-secondary btn-lg" data-translate="hero_cta_secondary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14,2 14,8 20,8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10,9 9,9 8,9"></polyline>
-                        </svg>
-                        Læs Guides
+                    <a href="#blog" class="btn btn-secondary" data-translate="hero_cta_guides">
+                        📚 Læs Guides
                     </a>
                 </div>
             </div>
@@ -298,19 +287,35 @@
                     </p>
                 </div>
 
-                <div class="demo-tabs">
-                    <button class="demo-tab active" onclick="runFilesystemDemo()" data-demo="filesystem" data-translate="demo_filesystem">
-                        📁 Filesystem
-                    </button>
-                    <button class="demo-tab" onclick="runDatabaseDemo()" data-demo="database" data-translate="demo_database">
-                        🗄️ Database
-                    </button>
-                    <button class="demo-tab" onclick="runApiDemo()" data-demo="api" data-translate="demo_api">
-                        🌐 API Integration
-                    </button>
-                    <button class="demo-tab" onclick="runRealtimeDemo()" data-demo="realtime" data-translate="demo_realtime">
-                        ⚡ Real-time Data
-                    </button>
+                <div class="grid grid-2">
+                    <div class="demo-card" data-demo="filesystem" onclick="runFilesystemDemo()">
+                        <div class="feature-icon">📁</div>
+                        <h3 class="feature-title">Filesystem Demo</h3>
+                        <p class="feature-description">
+                            Interactive demonstration of file system operations and real-time updates.
+                        </p>
+                    </div>
+                    <div class="demo-card" data-demo="database" onclick="runDatabaseDemo()">
+                        <div class="feature-icon">🗄️</div>
+                        <h3 class="feature-title">Database Demo</h3>
+                        <p class="feature-description">
+                            See how modern applications connect to databases and handle data efficiently.
+                        </p>
+                    </div>
+                    <div class="demo-card" data-demo="api" onclick="runApiDemo()">
+                        <div class="feature-icon">🌐</div>
+                        <h3 class="feature-title">API Integration</h3>
+                        <p class="feature-description">
+                            Learn how to integrate with external APIs and handle authentication.
+                        </p>
+                    </div>
+                    <div class="demo-card" data-demo="realtime" onclick="runRealtimeDemo()">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Real-time Data</h3>
+                        <p class="feature-description">
+                            Experience live data streaming and WebSocket connections in action.
+                        </p>
+                    </div>
                 </div>
 
                 <div class="demo-content" id="demoContent">
@@ -386,6 +391,36 @@
             </div>
             
             <div class="blog-grid">
+                <article class="blog-card" data-blog="build-first-server">
+                    <a href="blog/build-first-server.html" class="blog-card-link">
+                        <div class="blog-card-image">
+                            <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14,2 14,8 20,8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="blog-card-content">
+                            <span class="blog-category">Tutorial</span>
+                            <h3 class="blog-title" data-translate="blog.post3.title">Byg Din Første MCP Server: Komplet Step-by-Step Guide</h3>
+                            <p class="blog-excerpt" data-translate="blog.post3.excerpt">
+                                Hands-on tutorial til at bygge en produktionsklar MCP server fra bunden. Inkluderer kodeeksempler og best practices.
+                            </p>
+                            <div class="blog-meta">
+                                <div class="blog-author">
+                                    <div class="author-avatar"></div>
+                                    <span>Developer Team</span>
+                                </div>
+                                <span data-translate="blog.readTime">20 min læsning</span>
+                            </div>
+                            <span class="btn btn-ghost" data-translate="blog.readMore">Læs Mere</span>
+                        </div>
+                    </a>
+                </article>
+
                 <article class="blog-card" data-blog="understanding-mcp">
                     <a href="blog/understanding-mcp.html" class="blog-card-link">
                         <div class="blog-card-image">
@@ -399,9 +434,9 @@
                             </div>
                         </div>
                         <div class="blog-card-content">
-                            <span class="blog-category" data-translate="blog_category_basics">Grundlæggende</span>
-                            <h3 class="blog-title" data-translate="blog_title_understanding">Understanding MCP: Protokollen Der Forbinder AI Til Alt</h3>
-                            <p class="blog-excerpt" data-translate="blog_excerpt_understanding">
+                            <span class="blog-category">Grundlæggende</span>
+                            <h3 class="blog-title" data-translate="blog.post1.title">Understanding MCP: Protokollen Der Forbinder AI Til Alt</h3>
+                            <p class="blog-excerpt" data-translate="blog.post1.excerpt">
                                 Opdag hvordan Model Context Protocol revolutionerer AI-integrationer ved at give en standardiseret måde at forbinde AI-assistenter til enhver datakilde eller værktøj.
                             </p>
                             <div class="blog-meta">
@@ -409,9 +444,9 @@
                                     <div class="author-avatar"></div>
                                     <span>MCP Team</span>
                                 </div>
-                                <span>5 min læsning</span>
+                                <span data-translate="blog.readTime">5 min læsning</span>
                             </div>
-                            <span class="btn btn-ghost" data-translate="blog_read_more">Læs Mere</span>
+                            <span class="btn btn-ghost" data-translate="blog.readMore">Læs Mere</span>
                         </div>
                     </a>
                 </article>
@@ -427,9 +462,9 @@
                             </div>
                         </div>
                         <div class="blog-card-content">
-                            <span class="blog-category" data-translate="blog_category_technical">Teknisk</span>
-                            <h3 class="blog-title" data-translate="blog_title_architecture">MCP Architecture Deep Dive: Sådan Fungerer Det Virkelig</h3>
-                            <p class="blog-excerpt" data-translate="blog_excerpt_architecture">
+                            <span class="blog-category">Teknisk</span>
+                            <h3 class="blog-title" data-translate="blog.post2.title">MCP Architecture Deep Dive: Sådan Fungerer Det Virkelig</h3>
+                            <p class="blog-excerpt" data-translate="blog.post2.excerpt">
                                 Udforsk den tekniske arkitektur bag MCP, inklusive client-server modellen, ressourcehåndtering og sikkerhedsovervejelser.
                             </p>
                             <div class="blog-meta">
@@ -437,39 +472,9 @@
                                     <div class="author-avatar"></div>
                                     <span>Anthropic Team</span>
                                 </div>
-                                <span>12 min læsning</span>
+                                <span data-translate="blog.readTime">12 min læsning</span>
                             </div>
-                            <span class="btn btn-ghost" data-translate="blog_read_more">Læs Mere</span>
-                        </div>
-                    </a>
-                </article>
-
-                <article class="blog-card" data-blog="build-first-server">
-                    <a href="blog/build-first-server.html" class="blog-card-link">
-                        <div class="blog-card-image">
-                            <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); height: 100%; display: flex; align-items: center; justify-content: center;">
-                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14,2 14,8 20,8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="blog-card-content">
-                            <span class="blog-category" data-translate="blog_category_tutorial">Tutorial</span>
-                            <h3 class="blog-title" data-translate="blog_title_first_server">Byg Din Første MCP Server: Komplet Step-by-Step Guide</h3>
-                            <p class="blog-excerpt" data-translate="blog_excerpt_first_server">
-                                Hands-on tutorial til at bygge en produktionsklar MCP server fra bunden. Inkluderer kodeeksempler og best practices.
-                            </p>
-                            <div class="blog-meta">
-                                <div class="blog-author">
-                                    <div class="author-avatar"></div>
-                                    <span>Developer Team</span>
-                                </div>
-                                <span>20 min læsning</span>
-                            </div>
-                            <span class="btn btn-ghost" data-translate="blog_read_more">Læs Mere</span>
+                            <span class="btn btn-ghost" data-translate="blog.readMore">Læs Mere</span>
                         </div>
                     </a>
                 </article>
@@ -484,9 +489,9 @@
                             </div>
                         </div>
                         <div class="blog-card-content">
-                            <span class="blog-category" data-translate="blog_category_use_cases">Use Cases</span>
-                            <h3 class="blog-title" data-translate="blog_title_use_cases">MCP Use Cases: Fra File Management Til Real-Time Data</h3>
-                            <p class="blog-excerpt" data-translate="blog_excerpt_use_cases">
+                            <span class="blog-category">Use Cases</span>
+                            <h3 class="blog-title" data-translate="blog.post4.title">MCP Use Cases: Fra File Management Til Real-Time Data</h3>
+                            <p class="blog-excerpt" data-translate="blog.post4.excerpt">
                                 Udforsk praktiske MCP implementeringer på tværs af industrier med rigtige eksempler og case studies.
                             </p>
                             <div class="blog-meta">
@@ -494,9 +499,9 @@
                                     <div class="author-avatar"></div>
                                     <span>Industry Team</span>
                                 </div>
-                                <span>15 min læsning</span>
+                                <span data-translate="blog.readTime">15 min læsning</span>
                             </div>
-                            <span class="btn btn-ghost" data-translate="blog_read_more">Læs Mere</span>
+                            <span class="btn btn-ghost" data-translate="blog.readMore">Læs Mere</span>
                         </div>
                     </a>
                 </article>
@@ -504,13 +509,115 @@
         </div>
     </section>
 
-    <!-- Premium Footer -->
+
+    <!-- Consultation Modal -->
+    <div class="consultation-modal" id="consultationModal">
+        <div class="modal-backdrop" onclick="closeConsultationModal()"></div>
+        <div class="modal-content-container">
+            <div class="modal-content consultation-form">
+                <div class="modal-header">
+                    <h3>📞 Book Din MCP Konsultation</h3>
+                    <p>Få personlig vejledning til din MCP implementering</p>
+                </div>
+                <form class="consultation-form-inner" onsubmit="submitConsultation(event)">
+                    <div class="form-group">
+                        <label for="consultName">Navn *</label>
+                        <input type="text" id="consultName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="consultEmail">Email *</label>
+                        <input type="email" id="consultEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="consultCompany">Virksomhed</label>
+                        <input type="text" id="consultCompany" name="company">
+                    </div>
+                    <div class="form-group">
+                        <label for="consultProject">Beskriv dit MCP projekt *</label>
+                        <textarea id="consultProject" name="project" rows="3" placeholder="Hvilke systemer vil du forbinde? Hvad er dit mål?" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            Book Konsultation
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="closeConsultationModal()">Annuller</button>
+                    </div>
+                </form>
+                <div class="trust-indicators">
+                    <div class="trust-item">
+                        <span class="trust-icon">⚡</span>
+                        <span>Svar indenfor 24 timer</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-icon">🔒</span>
+                        <span>Fortrolig & GDPR-sikker</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-icon">💡</span>
+                        <span>Gratis første samtale</span>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close-btn" onclick="closeConsultationModal()">×</button>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section class="about section" id="about">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 class="section-title" data-translate="about_title">Om MCP Hub</h2>
+                <p class="section-subtitle" data-translate="about_subtitle">
+                    Vi er dedikeret til at hjælpe udviklere med at mestre Model Context Protocol og bygge kraftfulde AI-integrationer.
+                </p>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3 class="feature-title" data-translate="about_mission_title">Vores Mission</h3>
+                    <p class="feature-description" data-translate="about_mission_desc">
+                        At levere omfattende, praktiske guides og interaktive demonstrationer der hjælper udviklere 
+                        med at forstå og implementere Model Context Protocol i deres projekter.
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="feature-title" data-translate="about_different_title">Derfor Er Vi Forskellige</h3>
+                    <p class="feature-description" data-translate="about_different_desc">
+                        Vi fokuserer på hands-on læring med interaktive demos, rigtige kodeeksempler og praktiske tutorials 
+                        som du kan anvende direkte i dine AI-applikationer.
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="feature-title" data-translate="about_community_title">Community Drevet</h3>
+                    <p class="feature-description" data-translate="about_community_desc">
+                        Bygget af udviklere til udviklere. Vi lytter til community'et og opdaterer løbende vores indhold 
+                        baseret på de nyeste MCP trends og feedback.
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="feature-title" data-translate="about_current_title">Altid Opdateret</h3>
+                    <p class="feature-description" data-translate="about_current_desc">
+                        Vores indhold opdateres regelmæssigt for at afspejle de seneste MCP funktioner, værktøjer og best practices 
+                        i det hurtigt udviklende AI-integrations landskab.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>MCP Hub</h4>
-                    <p style="color: var(--gray-400); margin-bottom: var(--space-lg);">
+                    <p style="color: var(--gray-400); margin-bottom: var(--space-lg);" data-translate="footer_description">
                         Din komplette guide til at mestre Model Context Protocol. 
                         Fra begyndertutorials til avancerede implementeringsmønstre.
                     </p>
@@ -522,44 +629,44 @@
                         </a>
                         <a href="#" class="btn btn-icon btn-ghost">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                             </svg>
                         </a>
                         <a href="#" class="btn btn-icon btn-ghost">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12.5 3c-1.05 0-2.05.22-2.95.66-.9.44-1.65 1.06-2.25 1.86-.6.8-.9 1.78-.9 2.94 0 1.31.47 2.33 1.4 3.06.93.73 2.05 1.1 3.35 1.1.21 0 .42-.01.63-.03s.42-.05.63-.1l-.03-.67c-.01-.11-.01-.21-.01-.31 0-.1.01-.2.03-.31.02-.11.04-.22.07-.33l.63-.82c.26-.33.37-.7.37-1.1 0-.4-.11-.77-.31-1.11-.2-.34-.48-.61-.84-.81-.36-.2-.74-.3-1.16-.3-.83 0-1.5.3-2.02.91-.52.61-.78 1.38-.78 2.31 0 .22.02.43.07.63.05.2.11.39.18.57.07.18.15.34.24.48.09.14.18.26.27.36.09.1.17.18.24.24.07.06.13.1.18.12-.33.94-.5 1.76-.5 2.47 0 .71.09 1.3.28 1.78.19.48.45.84.78 1.08.33.24.7.36 1.1.36.4 0 .77-.12 1.1-.36.33-.24.59-.6.78-1.08.19-.48.28-1.07.28-1.78 0-.71-.17-1.53-.5-2.47.05-.02.11-.06.18-.12.07-.06.15-.14.24-.24.09-.1.18-.22.27-.36.09-.14.17-.3.24-.48.07-.18.13-.37.18-.57.05-.2.07-.41.07-.63 0-.93-.26-1.7-.78-2.31-.52-.61-1.19-.91-2.02-.91z"/>
+                                <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0003 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1568 2.4189Z"/>
                             </svg>
                         </a>
                     </div>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Lær MCP</h4>
+                    <h4 data-translate="footer_learn_title">Lær MCP</h4>
                     <ul class="footer-links">
                         <li><a href="#" data-translate="footer_getting_started">Kom I Gang</a></li>
-                        <li><a href="#" data-translate="footer_tutorials">Tutorials</a></li>
-                        <li><a href="#" data-translate="footer_examples">Eksempler</a></li>
+                        <li><a href="#blog" data-translate="footer_tutorials">Tutorials</a></li>
+                        <li><a href="#demos" data-translate="footer_examples">Eksempler</a></li>
                         <li><a href="#" data-translate="footer_best_practices">Best Practices</a></li>
                         <li><a href="#" data-translate="footer_documentation">Dokumentation</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Community</h4>
+                    <h4 data-translate="footer_community_title">Community</h4>
                     <ul class="footer-links">
                         <li><a href="#" data-translate="footer_github">GitHub Repository</a></li>
                         <li><a href="#" data-translate="footer_discord">Discord Server</a></li>
                         <li><a href="#" data-translate="footer_forum">Community Forum</a></li>
                         <li><a href="#" data-translate="footer_contribute">Bidrag</a></li>
-                        <li><a href="#" data-translate="footer_blog">Blog</a></li>
+                        <li><a href="#blog" data-translate="footer_blog">Blog</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Support</h4>
+                    <h4 data-translate="footer_support_title">Support</h4>
                     <ul class="footer-links">
                         <li><a href="#" data-translate="footer_help">Hjælp & Support</a></li>
-                        <li><a href="#" data-translate="footer_contact">Kontakt Os</a></li>
+                        <li><a href="#about" data-translate="footer_contact">Kontakt Os</a></li>
                         <li><a href="#" data-translate="footer_bug_reports">Bug Reports</a></li>
                         <li><a href="#" data-translate="footer_feature_requests">Feature Requests</a></li>
                         <li><a href="#" data-translate="footer_status">Status Page</a></li>
@@ -568,24 +675,22 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2024 MCP Hub. Open source med ❤️ fra MCP community.</p>
+                <p data-translate="footer_copyright">&copy; 2024 MCP Hub. Open source med ❤️ fra MCP community.</p>
             </div>
         </div>
     </footer>
 
     <!-- Demo Modal -->
-    <div class="demo-modal" id="demoModal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content-container">
-            <div class="modal-content" id="modalContent">
-                <!-- Content injected by JS -->
-            </div>
-            <button class="modal-close-btn" onclick="closeDemoModal()">×</button>
+    <div id="demoModal">
+        <div class="modal-content" id="modalContent">
+            <!-- Content injected by JS -->
         </div>
+        <button class="modal-close" onclick="closeDemoModal()">×</button>
     </div>
 
     <!-- Main Application Logic -->
     <script type="module" src="js/main.js"></script>
     <script src="js/eli5.js"></script>
+    <script src="js/consultation.js"></script>
 </body>
 </html>
